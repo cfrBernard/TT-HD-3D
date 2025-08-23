@@ -1,0 +1,24 @@
+Match/
+├── Scripts/
+│   ├── MatchManager.cs            // flow global (start, turns, end)
+│   ├── TurnSystem.cs              // logique de tours
+│   ├── MatchParticipant.cs        // joueur ou IA (deck + main, etc.)
+│   ├── MatchEvents.cs             // events centralisés (OnTurnStart, OnCardPlayed…)
+│   ├── MatchAI.cs                 // logique AI
+│   └── Utils/                     // helpers (probabilité, state machine, etc.)
+│
+├── ScriptableObjects/
+│   ├── MatchConfig.asset          // config générale (taille main, nb mulligans…)
+│   └── Rules/                     // règles data-driven
+│
+├── Prefabs/
+│   ├── MatchBoard.prefab          // le plateau
+│   ├── Zones/                     // hand zone, discard zone
+│   └── Debug/                     // helpers debug, test UI
+│
+├── UI/
+│   ├── HUD/                       // score, tours, etc.
+│   ├── MatchOverlay.prefab        // UI globale du match
+│   └── Scripts/                   // scripts UI liés au match
+│
+└── Tests/                         // tests unitaires ou scènes de tests
