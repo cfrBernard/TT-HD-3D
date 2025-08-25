@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1faf7deeafb9e8b41a99f994f916184c, type: 3}
+  m_Name: 01001_Alchemist
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardId: 01001
+  cardName: Alchemist
+  level: 1
+  frontAlbedo: {fileID: 2800000, guid: 5dc58ae83aedc6e42b725acee752f2f1, type: 3}
+  north: 5
+  south: 1
+  west: 3
+  east: 1
