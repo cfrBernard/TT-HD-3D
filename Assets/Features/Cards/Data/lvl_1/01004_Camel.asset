@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1faf7deeafb9e8b41a99f994f916184c, type: 3}
   m_Name: 01004_Camel
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardId: 
-  cardName: 
-  level: 0
+  cardId: 01004
+  cardName: Camel
+  level: 1
   frontAlbedo: {fileID: 2800000, guid: f6e60f4a8d513e94a89ec5f06511e465, type: 3}
-  north: 0
-  south: 0
-  west: 0
-  east: 0
+  north: 2
+  south: 2
+  west: 6
+  east: 1

@@ -7,6 +7,8 @@ public class CardData : ScriptableObject
     public string cardName;
     public int level;
 
+    // public bool isHolo;
+
     public Texture2D frontAlbedo;
 
     [Header("Stats")]

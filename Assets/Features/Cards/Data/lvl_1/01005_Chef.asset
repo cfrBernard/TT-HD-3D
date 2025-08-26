@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1faf7deeafb9e8b41a99f994f916184c, type: 3}
   m_Name: 01005_Chef
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardId: 
-  cardName: 
-  level: 0
+  cardId: 01005
+  cardName: Chef
+  level: 1
   frontAlbedo: {fileID: 2800000, guid: 3e875b7a54a74a748b8ec6579a129167, type: 3}
-  north: 0
-  south: 0
-  west: 0
-  east: 0
+  north: 2
+  south: 1
+  west: 5
+  east: 3

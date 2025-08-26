@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1faf7deeafb9e8b41a99f994f916184c, type: 3}
   m_Name: 01003_BullNetch
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardId: 
-  cardName: 
+  cardId: 01003
+  cardName: Bull Netch
   level: 1
   frontAlbedo: {fileID: 2800000, guid: cfd53e33e1453784780437d29218e44d, type: 3}
   north: 1
