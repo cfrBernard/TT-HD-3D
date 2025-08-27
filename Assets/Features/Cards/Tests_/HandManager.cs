@@ -1,63 +1,40 @@
 using UnityEngine;
-using System.Linq;
-using System.Collections.Generic;
 
 public class HandManager : MonoBehaviour
 {
-    [Header("Setup")]
-    public CardDatabase database;
+    public HandLayout handLayout;
+    public Transform deckPosition;
     public GameObject cardPrefab;
 
-    [Header("Players Hands")]
-    public Transform handParentP1;
-    public Transform handParentP2;
+    private Player player; 
+    private bool isPlayer1;
 
-    [Header("Deck Positions")]
-    public Transform deckP1;
-    public Transform deckP2;
-
-    private Player player1;
-    private Player player2;
-    private List<Card> virtualDeck;
-
-    void Start()
+    public void Init(Player p, bool isP1)
     {
-        // Init Players
-        player1 = new Player();
-        player2 = new Player();
-
-        // Crée un deck virtuel commun depuis la database
-        virtualDeck = database.allCards.Select(cd => new Card(cd)).ToList();
-
-        // donne 5 cartes à chaque joueur
-        DrawInitialHand(player1, handParentP1, deckP1, 5, flipOnDraw: true);
-        DrawInitialHand(player2, handParentP2, deckP2, 5, flipOnDraw: false);
+        player = p;
+        isPlayer1 = isP1;
     }
 
-    void DrawInitialHand(Player player, Transform handParent, Transform deckPos, int number, bool flipOnDraw = false)
+    public void DrawStartingHand(int count = 5)
     {
-        var randomCards = virtualDeck.OrderBy(x => Random.value).Take(number).ToList();
-        player.Hand = randomCards;
-        
-        float delayBetweenCards = 0.2f;
-
-        for (int i = 0; i < player.Hand.Count; i++)
+        for (int i = 0; i < count; i++)
         {
-            var cardGO = Instantiate(cardPrefab, handParent);
-            Vector3 startWorldPos = deckPos.position;
-            cardGO.transform.position = startWorldPos;
+            Card card = player.DrawCard();
+            if (card == null) continue;
+
+            GameObject cardGO = Instantiate(cardPrefab);
+            CardView view = cardGO.GetComponent<CardView>();
+            view.Setup(card);
+
+            // Pop en rotation locale 0,180,0 et position du deck
             cardGO.transform.rotation = Quaternion.Euler(-90, 180, 0);
+            cardGO.transform.position = deckPosition.position;
 
-            cardGO.GetComponent<CardView>().Setup(player.Hand[i].Data);
+            float delay = i * 0.5f;
+            Transform targetSlot = handLayout.slots[i];
 
-            // target local dans la main
-            Vector3 targetLocalPos = new Vector3(0, i * 0.8f, i * -0.01f);
-            Quaternion targetLocalRot = Quaternion.identity;
-
-            cardGO.GetComponent<CardAnimator>().AnimateTo(targetLocalPos, targetLocalRot, flipOnDraw, i * delayBetweenCards);
-
+            // Animation vers slot + flip
+            view.AnimateDraw(deckPosition.position, targetSlot, isPlayer1, delay);
         }
     }
-
-
 }
