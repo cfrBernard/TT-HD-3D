@@ -2,28 +2,33 @@ using System.Collections.Generic;
 
 public class Player
 {
-    public List<Card> Deck = new List<Card>(); // deck complet
-    public List<Card> Hand = new List<Card>(); // main du joueur
+    public string Name; // For logs
+    public List<Card> Deck { get; private set; } = new List<Card>();
+    public List<Card> Hand { get; private set; } = new List<Card>();
 
-    public Player(List<Card> startingDeck)
+    public Player(string name)
     {
-        Deck = new List<Card>(startingDeck);
-        Hand = new List<Card>();
+        Name = name;
     }
+
+    public void SetDeck(List<Card> deck)
+    {
+        Deck = deck;
+
+        foreach (var card in Deck)
+            card.Owner = this;
+    }
+
+    public override string ToString() => Name;
 
     public Card DrawCard()
     {
         if (Deck.Count == 0) return null;
-
         Card drawn = Deck[0];
         Deck.RemoveAt(0);
         Hand.Add(drawn);
         return drawn;
     }
 
-    public void RemoveFromHand(Card card)
-    {
-        Hand.Remove(card);
-    }
+    public void RemoveFromHand(Card card) => Hand.Remove(card);
 }
-

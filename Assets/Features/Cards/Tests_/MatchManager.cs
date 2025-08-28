@@ -1,34 +1,37 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 
-public class GameManager : MonoBehaviour
+public class MatchManager : MonoBehaviour
 {
     public HandManager player1Hand;
     public HandManager player2Hand;
 
-    // TESTING REFz2 (need to conect the real deck)
+    // TESTING REFz2 (connect the real deck later)
     public List<CardData> dummyDeck;
 
-    private Player player1;
-    private Player player2;
+    public Player player1;
+    public Player player2;
 
     //private IPlayerController controller1;
     //private IPlayerController controller2;
 
     void Start()
     {
-        // Setup players
-        player1 = new Player(CreateDeck(dummyDeck));
-        player2 = new Player(CreateDeck(dummyDeck));
+        // Crée les joueurs
+        player1 = new Player("Player1");
+        player2 = new Player("Player2");
 
-        // Setup controllers
+        // Crée les decks en passant directement le Player comme owner
+        player1.SetDeck(CreateDeck(dummyDeck, player1));
+        player2.SetDeck(CreateDeck(dummyDeck, player2));
+
+        // Setup controllers (later)
         //controller1 = new HumanController();
         //controller2 = new AIController();
 
         // Init player hands
         player1Hand.Init(player1, true);  // true = flip
-        player2Hand.Init(player2, true); // false = no flip
+        player2Hand.Init(player2, false); // false = no flip
 
         player1Hand.DrawStartingHand();
         player2Hand.DrawStartingHand();
@@ -36,12 +39,12 @@ public class GameManager : MonoBehaviour
         // StartCoroutine(GameLoop()); REFz1 ----------------
     }
 
-    // TESTING REFz2 (need to conect the real deck)
-    List<Card> CreateDeck(List<CardData> data)
+    // TESTING REFz2 (connect the real deck later)
+    List<Card> CreateDeck(List<CardData> data, Player owner)
     {
         List<Card> deck = new List<Card>();
         foreach (var d in data)
-            deck.Add(new Card(d));
+            deck.Add(new Card(d, owner));
         return deck;
     }
 

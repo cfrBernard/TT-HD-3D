@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class HandLayout : MonoBehaviour
 {
@@ -17,5 +16,3 @@ public class HandLayout : MonoBehaviour
         return slots[index].rotation;
     }
 }
-
-

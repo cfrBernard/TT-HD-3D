@@ -1,11 +1,11 @@
 public class Card
 {
     public CardData Data { get; private set; }
-    public bool IsFacingUp { get; set; }
+    public Player Owner { get; set; }
 
-    public Card(CardData data)
+    public Card(CardData data, Player owner)
     {
         Data = data;
-        IsFacingUp = false;
+        Owner = owner;
     }
 }

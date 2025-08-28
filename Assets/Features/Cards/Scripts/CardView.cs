@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(CardAnimator))]
 public class CardView : MonoBehaviour
 {
+    public Card Card { get; private set; }
     public MeshRenderer renderer;
     private MaterialPropertyBlock mpb;
-    private Card cardData;
     private CardAnimator animator;
 
     private void Awake()
@@ -15,7 +15,9 @@ public class CardView : MonoBehaviour
 
     public void Setup(Card card)
     {
-        cardData = card;
+        Card = card;
+        Debug.Log($"[CardView] Setup for card '{card.Data.name}' (Owner: {card.Owner}).");
+        
         if (mpb == null) mpb = new MaterialPropertyBlock();
         renderer.GetPropertyBlock(mpb);
         mpb.SetTexture("_FrontAlbedo", card.Data.frontAlbedo);
