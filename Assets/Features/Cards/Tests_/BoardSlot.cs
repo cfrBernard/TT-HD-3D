@@ -1,1 +1,22 @@
-// PLACEHOLDER
+public class BoardSlot
+{
+    public int X { get; private set; }
+    public int Y { get; private set; }
+    public Card Occupant { get; private set; }
+
+    public bool IsEmpty => Occupant == null;
+
+    public BoardSlot(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    public void PlaceCard(Card card)
+    {
+        if (Occupant != null)
+            throw new System.InvalidOperationException($"Slot {X},{Y} is already occupied!");
+
+        Occupant = card;
+    }
+}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class MatchManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class MatchManager : MonoBehaviour
 
     // TESTING REFz2 (connect the real deck later)
     public List<CardData> dummyDeck;
+
+    public BoardManager board;
 
     public Player player1;
     public Player player2;
@@ -36,7 +39,7 @@ public class MatchManager : MonoBehaviour
         player1Hand.DrawStartingHand();
         player2Hand.DrawStartingHand();
 
-        // StartCoroutine(GameLoop()); REFz1 ----------------
+        StartCoroutine(GameLoop());
     }
 
     // TESTING REFz2 (connect the real deck later)
@@ -48,17 +51,39 @@ public class MatchManager : MonoBehaviour
         return deck;
     }
 
-    // REFz1 -------------------------------------------------
-    //IEnumerator GameLoop()
-    //{
-    //    while (!IsGameOver())
-    //    {
-    //        yield return controller1.PlayTurn(player1, this);
-    //        if (IsGameOver()) break;
-    //
-    //        yield return controller2.PlayTurn(player2, this);
-    //    }
-    //
-    //    EndMatch();
-    //}
+    IEnumerator GameLoop()
+    {
+        bool isPlayer1Turn = true;
+
+        while (!board.IsFull())
+        {
+            Player current = isPlayer1Turn ? player1 : player2;
+
+            // Pour l’instant : prend la 1ère carte de la main
+            Card cardToPlay = current.Hand[0];
+            current.RemoveFromHand(cardToPlay);
+
+            // Placement dummy : toujours dans la première case libre
+            bool placed = false;
+            for (int x = 0; x < BoardManager.SIZE && !placed; x++)
+            {
+                for (int y = 0; y < BoardManager.SIZE && !placed; y++)
+                {
+                    if (board.GetSlot(x, y).IsEmpty)
+                    {
+                        board.TryPlaceCard(x, y, cardToPlay);
+                        placed = true;
+                    }
+                }
+            }
+
+            // Attends un peu pour debug
+            yield return new WaitForSeconds(1f);
+
+            // Change de joueur
+            isPlayer1Turn = !isPlayer1Turn;
+        }
+
+        Debug.Log("Game Over! Board is full.");
+    }
 }
