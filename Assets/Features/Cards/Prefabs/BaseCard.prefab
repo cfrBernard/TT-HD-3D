@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7668835235603827949}
   - component: {fileID: 5476908935874384000}
+  - component: {fileID: 6181506867394114965}
   - component: {fileID: 4830996346509920853}
   - component: {fileID: 7304231951325598638}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BaseCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,6 +49,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardView
   renderer: {fileID: 7737828718730690546}
+--- !u!114 &6181506867394114965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022751060614524190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34edfaf27b6e3e849aa9283bfee287cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardDragHandler
+  cardLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  slotLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!114 &4830996346509920853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,7 +96,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -94,7 +113,6 @@ GameObject:
   - component: {fileID: 7936459208210748308}
   - component: {fileID: 6429598686456379854}
   - component: {fileID: 7737828718730690546}
-  - component: {fileID: 2115052587796788723}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -173,25 +191,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2115052587796788723
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8740613804056238619}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}

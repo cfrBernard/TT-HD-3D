@@ -24,7 +24,7 @@ public class MatchManager : MonoBehaviour
         player1 = new Player("Player1");
         player2 = new Player("Player2");
 
-        // Crée les decks en passant directement le Player comme owner
+        // Crée les decks en passant le Player comme owner
         player1.SetDeck(CreateDeck(dummyDeck, player1));
         player2.SetDeck(CreateDeck(dummyDeck, player2));
 
@@ -39,7 +39,7 @@ public class MatchManager : MonoBehaviour
         player1Hand.DrawStartingHand();
         player2Hand.DrawStartingHand();
 
-        StartCoroutine(GameLoop());
+        StartCoroutine(GameLoop1());
     }
 
     // TESTING REFz2 (connect the real deck later)
@@ -50,38 +50,15 @@ public class MatchManager : MonoBehaviour
             deck.Add(new Card(d, owner));
         return deck;
     }
-
-    IEnumerator GameLoop()
+    
+    IEnumerator GameLoop1()
     {
-        bool isPlayer1Turn = true;
+        Debug.Log("Game start - waiting for player to drag cards...");
 
+        // Pour l’instant on attend que le board soit full
         while (!board.IsFull())
         {
-            Player current = isPlayer1Turn ? player1 : player2;
-
-            // Pour l’instant : prend la 1ère carte de la main
-            Card cardToPlay = current.Hand[0];
-            current.RemoveFromHand(cardToPlay);
-
-            // Placement dummy : toujours dans la première case libre
-            bool placed = false;
-            for (int x = 0; x < BoardManager.SIZE && !placed; x++)
-            {
-                for (int y = 0; y < BoardManager.SIZE && !placed; y++)
-                {
-                    if (board.GetSlot(x, y).IsEmpty)
-                    {
-                        board.TryPlaceCard(x, y, cardToPlay);
-                        placed = true;
-                    }
-                }
-            }
-
-            // Attends un peu pour debug
-            yield return new WaitForSeconds(1f);
-
-            // Change de joueur
-            isPlayer1Turn = !isPlayer1Turn;
+            yield return null; // joueur libre
         }
 
         Debug.Log("Game Over! Board is full.");

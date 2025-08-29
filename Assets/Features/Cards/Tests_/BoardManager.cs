@@ -32,7 +32,7 @@ public class BoardManager : MonoBehaviour
         if (!slot.IsEmpty)
         {
             Debug.LogWarning($"Slot {x},{y} already occupied.");
-            return false;
+            return false; // ??? il veut pas la poser, mais pas de log ???
         }
 
         slot.PlaceCard(card);
