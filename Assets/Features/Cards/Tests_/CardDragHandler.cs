@@ -3,12 +3,17 @@ using UnityEngine.InputSystem;
 
 public class CardDragHandler : MonoBehaviour
 {
+    [SerializeField] private LayerMask cardLayerMask;
+    [SerializeField] private LayerMask slotLayerMask;
+
     private Camera cam;
     private CardView cardView;
     private bool dragging;
+    private bool isPlaced = false;
 
-    [SerializeField] private LayerMask cardLayerMask;
-    [SerializeField] private LayerMask slotLayerMask;
+    // Rollback
+    private Vector3 originalPos;
+    private Quaternion originalRot;
 
     void Awake()
     {
@@ -18,20 +23,22 @@ public class CardDragHandler : MonoBehaviour
 
     void Update()
     {
-        // clic gauche down -> vérifier si on a cliqué sur CETTE carte
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        // clic gauche down -> start drag
+        if (Mouse.current.leftButton.wasPressedThisFrame && !isPlaced)
         {
             Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out RaycastHit hit, 10f, cardLayerMask))
             {
                 if (hit.collider.gameObject == gameObject)
                 {
+                    originalPos = transform.position;
+                    originalRot = transform.rotation;
                     dragging = true;
                 }
             }
         }
 
-        // clic gauche up -> vérifier si on a relaché sur CE slot
+        // clic gauche up -> drop
         if (Mouse.current.leftButton.wasReleasedThisFrame && dragging)
         {
             dragging = false;
@@ -48,14 +55,16 @@ public class CardDragHandler : MonoBehaviour
                     if (placed)
                     {
                         transform.position = slotView.transform.position;
+                        isPlaced = true;
                         Debug.Log($"Card '{cardView.Card.Data.name}' placed at {slotView.Slot.X},{slotView.Slot.Y}");
-                    }
-                    else
-                    {
-                        // rollback
+                        return; // fin -> pas de rollback
                     }
                 }
             }
+
+            // rollback si pas placé
+            transform.position = originalPos;
+            transform.rotation = originalRot;
         }
 
         // drag en cours
