@@ -3,6 +3,9 @@ using System.Collections.Generic;
 public class Player
 {
     public string Name; // For logs
+
+    public IPlayerController Controller { get; set; }
+
     public List<Card> Deck { get; private set; } = new List<Card>();
     public List<Card> Hand { get; private set; } = new List<Card>();
 

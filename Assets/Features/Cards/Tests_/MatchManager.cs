@@ -15,8 +15,8 @@ public class MatchManager : MonoBehaviour
     public Player player1;
     public Player player2;
 
-    //private IPlayerController controller1;
-    //private IPlayerController controller2;
+    private IPlayerController controller1;
+    private IPlayerController controller2;
 
     void Start()
     {
@@ -28,9 +28,11 @@ public class MatchManager : MonoBehaviour
         player1.SetDeck(CreateDeck(dummyDeck, player1));
         player2.SetDeck(CreateDeck(dummyDeck, player2));
 
-        // Setup controllers (later)
-        //controller1 = new HumanController();
-        //controller2 = new AIController();
+        // Setup controllers
+        controller1 = new HumanController();
+        controller2 = new AIController();
+        player1.Controller = controller1;
+        player2.Controller = controller2;
 
         // Init player hands
         player1Hand.Init(player1, true);  // true = flip
@@ -39,7 +41,7 @@ public class MatchManager : MonoBehaviour
         player1Hand.DrawStartingHand();
         player2Hand.DrawStartingHand();
 
-        StartCoroutine(GameLoop1());
+        StartCoroutine(GameLoop());
     }
 
     // TESTING REFz2 (connect the real deck later)
@@ -50,17 +52,38 @@ public class MatchManager : MonoBehaviour
             deck.Add(new Card(d, owner));
         return deck;
     }
-    
-    IEnumerator GameLoop1()
-    {
-        Debug.Log("Game start - waiting for player to drag cards...");
 
-        // Pour l’instant on attend que le board soit full
+    IEnumerator GameLoop()
+    {
+        Player current = DecideStartingPlayer();
+        Player other = (current == player1) ? player2 : player1;
+
+        // Setup mulligan/draw
+        // yield return DrawHand(current);
+        // yield return MulliganPhase(current);
+        // yield return DrawHand(other);
+        // yield return MulliganPhase(other);
+
+        // Tour normal
         while (!board.IsFull())
         {
-            yield return null; // joueur libre
+            yield return current.Controller.TakeTurn(current, board);
+            // switch player
+            Player temp = current;
+            current = other;
+            other = temp;
         }
 
-        Debug.Log("Game Over! Board is full.");
+        // EndMatch();
+        Debug.Log("[Match] Game Over! Board is full.");
     }
+
+    Player DecideStartingPlayer()
+    {
+        bool coin = Random.value > 0.5f;
+        Player starter = coin ? player1 : player2;
+        Debug.Log($"[Match] Toss result: {starter.Name} starts!");
+        return starter;
+    }
+
 }

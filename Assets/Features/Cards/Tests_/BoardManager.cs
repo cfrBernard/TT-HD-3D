@@ -31,12 +31,12 @@ public class BoardManager : MonoBehaviour
         BoardSlot slot = GetSlot(x, y);
         if (!slot.IsEmpty)
         {
-            Debug.LogWarning($"Slot {x},{y} already occupied.");
-            return false; // ??? il veut pas la poser, mais pas de log ???
+            Debug.LogWarning($"[BoardManager] Slot {x},{y} already occupied.");
+            return false;
         }
 
         slot.PlaceCard(card);
-        Debug.Log($"[Board] {card.Data.name} placed at {x},{y} by {card.Owner}");
+        Debug.Log($"[BoardManager] {card.Data.name} placed at {x},{y} by {card.Owner}");
         return true;
     }
 }

@@ -14,9 +14,6 @@ public class BoardSlot
 
     public void PlaceCard(Card card)
     {
-        if (Occupant != null)
-            throw new System.InvalidOperationException($"Slot {X},{Y} is already occupied!");
-
         Occupant = card;
     }
 }

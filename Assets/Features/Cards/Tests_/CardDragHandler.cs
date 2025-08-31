@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class CardDragHandler : MonoBehaviour
 {
+    public static event System.Action<Card> OnCardPlaced;
+
     [SerializeField] private LayerMask cardLayerMask;
     [SerializeField] private LayerMask slotLayerMask;
 
@@ -56,7 +58,10 @@ public class CardDragHandler : MonoBehaviour
                     {
                         transform.position = slotView.transform.position;
                         isPlaced = true;
-                        Debug.Log($"Card '{cardView.Card.Data.name}' placed at {slotView.Slot.X},{slotView.Slot.Y}");
+
+                        OnCardPlaced?.Invoke(cardView.Card);
+
+                        Debug.Log($"[Drag] Card '{cardView.Card.Data.name}' placed at {slotView.Slot.X},{slotView.Slot.Y}");
                         return; // fin -> pas de rollback
                     }
                 }
