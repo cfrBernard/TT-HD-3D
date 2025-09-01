@@ -18,6 +18,10 @@ public class MatchManager : MonoBehaviour
     private IPlayerController controller1;
     private IPlayerController controller2;
 
+    // AIController
+    public CardViewRegistry cardRegistry;
+    public BoardViewManager boardView;
+
     void Start()
     {
         // Crée les joueurs
@@ -30,7 +34,7 @@ public class MatchManager : MonoBehaviour
 
         // Setup controllers
         controller1 = new HumanController();
-        controller2 = new AIController();
+        controller2 = new AIController(cardRegistry, boardView);
         player1.Controller = controller1;
         player2.Controller = controller2;
 

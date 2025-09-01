@@ -1,40 +1,90 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AIController : IPlayerController
 {
+    private CardViewRegistry viewRegistry;
+    private BoardViewManager boardView;
+
+    public AIController(CardViewRegistry registry, BoardViewManager viewManager)
+    {
+        viewRegistry = registry;
+        boardView = viewManager;
+    }
+
     public IEnumerator TakeTurn(Player player, BoardManager board)
     {
         Debug.Log($"[Turn] {player.Name}'s turn (AI)");
+        yield return new WaitForSeconds(Random.Range(2.5f, 4.5f));
 
-        // simuler réflexion
-        float waitTime = 0f;
-        waitTime = Random.Range(2.5f, 4.5f);
-        yield return new WaitForSeconds(waitTime);
-
-        // carte de la main aléatoire
         if (player.Hand.Count == 0)
         {
-            Debug.LogWarning("AI has no cards to play!");
+            Debug.LogWarning("[AI] No cards in hand!");
             yield break;
         }
 
-        Card card = player.Hand[Random.Range(0, player.Hand.Count)];
+        // 1. Choisir la carte à jouer
+        Card cardToPlay = ChooseCard(player, board);
 
-        // Choisit un slot vide aléatoire
-        for (int attempt = 0; attempt < 20; attempt++)
+        // 2. Choisir le slot où la poser
+        (int x, int y)? slot = ChooseSlot(cardToPlay, player, board);
+
+        if (slot.HasValue)
         {
-            int x = Random.Range(0, BoardManager.SIZE);
-            int y = Random.Range(0, BoardManager.SIZE);
-
-            if (board.TryPlaceCard(x, y, card))
-            {
-                // résoudre captures
-                Debug.Log($"[AI] {player.Name} placed {card.Data.name} at {x},{y}");
-                break;
-            }
+            // 3. Jouer la carte
+            PlayCard(cardToPlay, player, board, slot.Value.x, slot.Value.y);
+        }
+        else
+        {
+            Debug.LogWarning("[AI] No valid slot to play this turn.");
         }
 
         yield return new WaitForSeconds(0.2f);
+    }
+
+    // Placeholder: pour l'instant choisit une carte random
+    private Card ChooseCard(Player player, BoardManager board)
+    {
+        return player.Hand[Random.Range(0, player.Hand.Count)];
+    }
+
+    // Placeholder: pour l'instant choisit un slot libre random
+    private (int x, int y)? ChooseSlot(Card card, Player player, BoardManager board)
+    {
+        var freeSlots = new List<(int x, int y)>();
+        for (int x = 0; x < BoardManager.SIZE; x++)
+        {
+            for (int y = 0; y < BoardManager.SIZE; y++)
+            {
+                if (board.GetSlot(x, y).IsEmpty)
+                    freeSlots.Add((x, y));
+            }
+        }
+
+        if (freeSlots.Count == 0) return null;
+
+        return freeSlots[Random.Range(0, freeSlots.Count)];
+    }
+
+    private void PlayCard(Card card, Player player, BoardManager board, int x, int y)
+    {
+        if (board.TryPlaceCard(x, y, card))
+        {
+            player.RemoveFromHand(card);
+
+            Debug.Log($"[AI] {player.Name} placed {card.Data.name} at {x},{y}");
+
+            // Animation
+            var cardView = viewRegistry.GetView(card);
+            var slotView = boardView.GetView(x, y);
+
+            if (cardView != null && slotView != null)
+            {
+                var animator = cardView.GetComponent<CardAnimator>();
+                if (animator != null)
+                    animator.AnimatePlay(slotView.transform);
+            }
+        }
     }
 }

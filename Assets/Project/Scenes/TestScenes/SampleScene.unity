@@ -985,6 +985,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b8f5eb2d7af439c4b9322e954d0952ca, type: 2}
   - {fileID: 11400000, guid: 8b4a39d978c8fda49a1e2c1498514ada, type: 2}
   board: {fileID: 243628281}
+  cardRegistry: {fileID: 886445331}
+  boardView: {fileID: 243628282}
 --- !u!1 &754378256
 GameObject:
   m_ObjectHideFlags: 0

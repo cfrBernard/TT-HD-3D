@@ -31,4 +31,34 @@ public class CardAnimator : MonoBehaviour
             seq.Append(flipSeq);
         }
     }
+
+    // AIController PlaceCard
+    public void AnimatePlay(Transform slot)
+    {
+        Sequence seq = DOTween.Sequence();
+
+        // Déplacement vers le slot
+        seq.Append(transform.DOMove(slot.position, moveDuration).SetEase(Ease.OutCubic));
+
+        // Vérifie si la carte est à dos (y -180)
+        bool isBack = Mathf.Approximately(transform.localRotation.eulerAngles.y, 180f);
+
+        // Dans tous les cas, on recale le parent et la position -> !! besoin de faire ca sur le player aussi – donc besoin de refaire les rotate Slot/CardPrefab !!
+        seq.AppendCallback(() =>
+        {
+            transform.SetParent(slot, true);
+            transform.localPosition = Vector3.zero;
+        });
+
+        if (isBack)
+        {
+            // Ajoute le flip recto
+            seq.Append(transform.DOLocalRotateQuaternion(Quaternion.Euler(-180, 0, 0), flipDuration).SetEase(Ease.OutCubic));
+        }
+        else
+        {
+            // Simple réorientation (au cas où)
+            seq.Append(transform.DOLocalRotateQuaternion(Quaternion.Euler(-180, 0, 0), 0.2f));
+        }
+    }
 }

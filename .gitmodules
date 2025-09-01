@@ -1,3 +1,6 @@
 [submodule "Assets/Private"]
 	path = Assets/Private
 	url = https://github.com/cfrBernard/TT-HD-3D_PrivateAssets.git
+[submodule "Docs/Private"]
+	path = Docs/Private
+	url = https://github.com/cfrBernard/TT-HD-3D_PrivateDocs.git
