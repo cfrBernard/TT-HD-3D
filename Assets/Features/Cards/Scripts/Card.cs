@@ -8,4 +8,13 @@ public class Card
         Data = data;
         Owner = owner;
     }
+
+    public void SetOwner(Player newOwner)
+    {
+        Owner = newOwner;
+
+        // Optionnel : notifier la vue si tu as un CardView associé
+        // var view = CardViewRegistry.Instance.GetView(this);
+        // view?.UpdateOwnerVisual();
+    }
 }

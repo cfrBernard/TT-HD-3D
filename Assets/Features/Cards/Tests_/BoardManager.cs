@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
     public const int SIZE = 3;
     private BoardSlot[,] slots = new BoardSlot[SIZE, SIZE];
+
+    public event Action<int, int, Card> OnCardPlaced;
 
     void Awake()
     {
@@ -36,6 +39,9 @@ public class BoardManager : MonoBehaviour
         }
 
         slot.PlaceCard(card);
+
+        OnCardPlaced?.Invoke(x, y, card);
+
         Debug.Log($"[BoardManager] {card.Data.name} placed at {x},{y} by {card.Owner}");
         return true;
     }

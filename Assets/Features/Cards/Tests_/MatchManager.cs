@@ -12,6 +12,8 @@ public class MatchManager : MonoBehaviour
 
     public BoardManager board;
 
+    public RuleEngine rules;
+
     public Player player1;
     public Player player2;
 
@@ -24,6 +26,10 @@ public class MatchManager : MonoBehaviour
 
     void Start()
     {
+        // Init Rules
+        rules = new RuleEngine(new BasicCaptureRule());
+        board.OnCardPlaced += (x, y, card) => rules.Resolve(board, x, y, card);
+
         // Crée les joueurs
         player1 = new Player("Player1");
         player2 = new Player("Player2");
