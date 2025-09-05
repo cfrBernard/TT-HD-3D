@@ -27,6 +27,20 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
+    public BoardSlot GetSlotOfCard(Card card)
+    {
+        for (int x = 0; x < SIZE; x++)
+        {
+            for (int y = 0; y < SIZE; y++)
+            {
+                var slot = slots[x, y];
+                if (!slot.IsEmpty && slot.Occupant == card)
+                    return slot;
+            }
+        }
+        return null; // pas trouvé
+    }
+
     public BoardSlot GetSlot(int x, int y) => slots[x, y];
 
     public bool TryPlaceCard(int x, int y, Card card)

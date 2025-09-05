@@ -37,7 +37,7 @@ public class BasicCaptureRule : IGameRule
             {
                 neighborCard.SetOwner(playedCard.Owner);
 
-                Debug.Log($"[Rule] {neighborCard.Data.name} captured by {playedCard.Data.name}");
+                Debug.Log($"[BasicRule] {neighborCard.Data.name} captured by {playedCard.Data.name}");
             }
         }
     }

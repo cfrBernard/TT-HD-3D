@@ -27,7 +27,11 @@ public class MatchManager : MonoBehaviour
     void Start()
     {
         // Init Rules
-        rules = new RuleEngine(new BasicCaptureRule());
+        rules = new RuleEngine();
+        rules.enableSame = true;
+        rules.enablePlus = true;
+        rules.enableCombo = true;
+        rules.enableBasic = true;
         board.OnCardPlaced += (x, y, card) => rules.Resolve(board, x, y, card);
 
         // Crée les joueurs
@@ -85,14 +89,14 @@ public class MatchManager : MonoBehaviour
         }
 
         // EndMatch();
-        Debug.Log("[Match] Game Over! Board is full.");
+        Debug.Log("[MatchManager] Game Over! Board is full.");
     }
 
     Player DecideStartingPlayer()
     {
         bool coin = Random.value > 0.5f;
         Player starter = coin ? player1 : player2;
-        Debug.Log($"[Match] Toss result: {starter.Name} starts!");
+        Debug.Log($"[MatchManager] Toss result: {starter.Name} starts!");
         return starter;
     }
 
