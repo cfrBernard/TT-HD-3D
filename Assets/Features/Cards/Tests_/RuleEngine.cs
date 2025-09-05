@@ -45,7 +45,7 @@ public class RuleEngine
             comboRule.Apply(board, flippedThisTurn);
 
         // 4. BasicCapture sur la carte jouée
-        if (enableBasic)
+        if (enableBasic && flippedThisTurn.Count == 0)
             basicRule.Apply(board, x, y, playedCard);
 
         // Fin du tour: vide le tracking
