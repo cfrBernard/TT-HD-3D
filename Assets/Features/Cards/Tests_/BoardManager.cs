@@ -8,7 +8,7 @@ public class BoardManager : MonoBehaviour
 
     public event Action<int, int, Card> OnCardPlaced;
 
-    void Awake()
+    public void Awake()
     {
         // Init logique du plateau
         for (int x = 0; x < SIZE; x++)
