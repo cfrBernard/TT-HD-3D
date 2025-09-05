@@ -3,6 +3,21 @@ using UnityEngine;
 
 public class CardViewRegistry : MonoBehaviour
 {
+    // --- Instance ---
+    public static CardViewRegistry Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
+    // --- Registry ---
     private Dictionary<Card, CardView> registry = new Dictionary<Card, CardView>();
 
     public void Register(Card card, CardView view)

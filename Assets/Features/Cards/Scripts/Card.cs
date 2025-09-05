@@ -13,8 +13,7 @@ public class Card
     {
         Owner = newOwner;
 
-        // Optionnel : notifier la vue si tu as un CardView associé
-        // var view = CardViewRegistry.Instance.GetView(this);
-        // view?.UpdateOwnerVisual();
+        var view = CardViewRegistry.Instance.GetView(this);
+        view?.UpdateOwnerVisual();
     }
 }
