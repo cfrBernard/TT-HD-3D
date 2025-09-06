@@ -5,6 +5,8 @@ public class CardDragHandler : MonoBehaviour
 {
     public static event System.Action<Card> OnCardPlaced;
 
+    public static Player CurrentPlayerTurn;
+
     [SerializeField] private LayerMask cardLayerMask;
     [SerializeField] private LayerMask slotLayerMask;
 
@@ -25,6 +27,9 @@ public class CardDragHandler : MonoBehaviour
 
     void Update()
     {
+        if (CurrentPlayerTurn != null && cardView.Card.Owner != CurrentPlayerTurn)
+            return;
+
         // clic gauche down -> start drag
         if (Mouse.current.leftButton.wasPressedThisFrame && !isPlaced)
         {

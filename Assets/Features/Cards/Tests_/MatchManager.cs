@@ -81,7 +81,11 @@ public class MatchManager : MonoBehaviour
         // Tour normal
         while (!board.IsFull())
         {
+            // block drag
+            CardDragHandler.CurrentPlayerTurn = current;
+
             yield return current.Controller.TakeTurn(current, board);
+
             // switch player
             Player temp = current;
             current = other;
