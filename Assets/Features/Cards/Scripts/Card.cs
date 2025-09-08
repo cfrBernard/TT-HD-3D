@@ -11,9 +11,12 @@ public class Card
 
     public void SetOwner(Player newOwner)
     {
+        var oldOwner = Owner;
         Owner = newOwner;
 
         var view = CardViewRegistry.Instance.GetView(this);
         view?.UpdateOwnerVisual();
+        
+        GameEventBus.Publish(new CardOwnerChanged(this, oldOwner, newOwner));
     }
 }

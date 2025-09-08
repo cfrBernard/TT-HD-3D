@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 public class MatchManager : MonoBehaviour
 {
-    public HandManager player1Hand;
-    public HandManager player2Hand;
-
     // TESTING REFz2 (connect the real deck later)
     public List<CardData> dummyDeck;
 
-    public BoardManager board;
-
     public RuleEngine rules;
+    public BoardManager board;
+    public ScoreManager scoreManager;
 
     public Player player1;
     public Player player2;
+
+    public HandManager player1Hand;
+    public HandManager player2Hand;
 
     private IPlayerController controller1;
     private IPlayerController controller2;
@@ -77,6 +77,8 @@ public class MatchManager : MonoBehaviour
         // yield return MulliganPhase(current);
         // yield return DrawHand(other);
         // yield return MulliganPhase(other);
+
+        scoreManager.Init();
 
         // Tour normal
         while (!board.IsFull())

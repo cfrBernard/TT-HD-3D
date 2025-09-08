@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -25,6 +26,17 @@ public class BoardManager : MonoBehaviour
         foreach (var slot in slots)
             if (slot.IsEmpty) return false;
         return true;
+    }
+
+    public IEnumerable<BoardSlot> GetAllSlots()
+    {
+        for (int x = 0; x < SIZE; x++)
+        {
+            for (int y = 0; y < SIZE; y++)
+            {
+                yield return slots[x, y];
+            }
+        }
     }
 
     public BoardSlot GetSlotOfCard(Card card)
