@@ -982,6 +982,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9d11f71ab5bfe0f4a9a8090b34a248d6, type: 2}
   - {fileID: 11400000, guid: b8f5eb2d7af439c4b9322e954d0952ca, type: 2}
   - {fileID: 11400000, guid: 8b4a39d978c8fda49a1e2c1498514ada, type: 2}
+  - {fileID: 11400000, guid: 0df1eb1beeabd2a49b6cd70b277b2194, type: 2}
   board: {fileID: 243628281}
   scoreManager: {fileID: 1857078539}
   player1Hand: {fileID: 1377249972}
