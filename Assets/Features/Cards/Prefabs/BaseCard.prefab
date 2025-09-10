@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7668835235603827949}
   - component: {fileID: 5476908935874384000}
   - component: {fileID: 6181506867394114965}
+  - component: {fileID: 232382030240861825}
   - component: {fileID: 4830996346509920853}
   - component: {fileID: 7304231951325598638}
   m_Layer: 10
@@ -69,6 +70,21 @@ MonoBehaviour:
   slotLayerMask:
     serializedVersion: 2
     m_Bits: 2048
+--- !u!114 &232382030240861825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022751060614524190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcbc7f66387026f4eb7680c6ed409799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardClickHandler
+  cardLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &4830996346509920853
 MonoBehaviour:
   m_ObjectHideFlags: 0

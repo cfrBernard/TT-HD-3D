@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 public class CardDragHandler : MonoBehaviour
 {
     public static event System.Action<Card> OnCardPlaced;
-
     public static Player CurrentPlayerTurn;
+    public static bool DragLocked = false;
 
     [SerializeField] private LayerMask cardLayerMask;
     [SerializeField] private LayerMask slotLayerMask;
@@ -27,6 +27,8 @@ public class CardDragHandler : MonoBehaviour
 
     void Update()
     {
+        if (DragLocked) return;
+
         if (CurrentPlayerTurn != null && cardView.Card.Owner != CurrentPlayerTurn)
             return;
 
@@ -66,7 +68,7 @@ public class CardDragHandler : MonoBehaviour
 
                         OnCardPlaced?.Invoke(cardView.Card);
 
-                        Debug.Log($"[Drag] Card '{cardView.Card.Data.name}' placed at {slotView.Slot.X},{slotView.Slot.Y}");
+                        Debug.Log($"[CardDragHandler] Card '{cardView.Card.Data.name}' placed at {slotView.Slot.X},{slotView.Slot.Y}");
                         return; // fin -> pas de rollback
                     }
                 }

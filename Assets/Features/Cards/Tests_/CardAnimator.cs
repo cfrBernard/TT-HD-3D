@@ -32,6 +32,17 @@ public class CardAnimator : MonoBehaviour
         }
     }
 
+    // Retourne la carte vers le deck, puis callback.
+    public void AnimateReturn(Vector3 deckPos, System.Action onComplete)
+    {
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(transform.DOMove(deckPos, moveDuration).SetEase(Ease.InBack));
+        seq.Join(transform.DORotate(new Vector3(-90, 180, 0), flipDuration).SetEase(Ease.InCubic));
+
+        seq.AppendCallback(() => onComplete?.Invoke());
+    }
+
     // AIController PlaceCard
     public void AnimatePlay(Transform slot)
     {

@@ -1,11 +1,14 @@
 using UnityEngine;
+using DG.Tweening;
+using System.Linq;
 
 public class HandManager : MonoBehaviour
 {
+    public Player Player => player;
+
     public HandLayout handLayout;
     public Transform deckPosition;
     public GameObject cardPrefab;
-
     public CardViewRegistry registry;
 
     private Player player;
@@ -43,5 +46,41 @@ public class HandManager : MonoBehaviour
             // Animation vers slot + flip
             view.AnimateDraw(deckPosition.position, targetSlot, isPlayer1, delay);
         }
+    }
+
+    public void MulliganCard(Card oldCard, Card newCard, int slotIndex)
+    {
+        Player.RemoveFromHand(oldCard);
+        var oldView = registry.GetView(oldCard);
+        if (oldView == null)
+        {
+            Debug.LogWarning("[HandManager] Old card view not found");
+            return;
+        }
+
+        var animator = oldView.GetComponent<CardAnimator>();
+        animator.AnimateReturn(deckPosition.position, () =>
+        {
+            registry.Unregister(oldCard);
+            DOTween.Kill(oldView.gameObject, true);
+            Destroy(oldView.gameObject);
+
+            if (newCard != null)
+            {
+                GameObject cardGO = Instantiate(cardPrefab);
+                CardView newView = cardGO.GetComponent<CardView>();
+                newView.Setup(newCard);
+
+                registry.Register(newCard, newView);
+
+                cardGO.transform.rotation = Quaternion.Euler(-90, 180, 0);
+                cardGO.transform.position = deckPosition.position;
+
+                Transform targetSlot = handLayout.slots[slotIndex];
+                newView.AnimateDraw(deckPosition.position, targetSlot, isPlayer1, 0f);
+
+                Debug.Log($"[HandManager][Hand Debug] {player.Name} hand after mulligan : " + string.Join(", ", player.Hand.Select(c => c.Data.name)));
+            }
+        });
     }
 }

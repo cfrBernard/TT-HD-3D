@@ -28,10 +28,10 @@ public class BasicCaptureRule : IGameRule
             var neighborCard = neighborSlot.Occupant;
             if (neighborCard.Owner == playedCard.Owner) continue;
 
-            Debug.Log($"Compare {playedCard.Data.name} ({myVal(playedCard)}) vs {neighborCard.Data.name} ({otherVal(neighborCard)}) at ({nx},{ny})");
-            Debug.Log($"PlayedCard: {playedCard.Data.name} | N:{playedCard.Data.north} S:{playedCard.Data.south} E:{playedCard.Data.east} W:{playedCard.Data.west}");
-            Debug.Log($"NeighborCard: {neighborCard.Data.name} | N:{neighborCard.Data.north} S:{neighborCard.Data.south} E:{neighborCard.Data.east} W:{neighborCard.Data.west}");
-            Debug.Log($"Direction: dx={dx}, dy={dy} → Slot({nx},{ny})");
+            Debug.Log($"[BasicRule] Compare {playedCard.Data.name} ({myVal(playedCard)}) vs {neighborCard.Data.name} ({otherVal(neighborCard)}) at ({nx},{ny})");
+            Debug.Log($"[BasicRule] PlayedCard: {playedCard.Data.name} | N:{playedCard.Data.north} S:{playedCard.Data.south} E:{playedCard.Data.east} W:{playedCard.Data.west}");
+            Debug.Log($"[BasicRule] NeighborCard: {neighborCard.Data.name} | N:{neighborCard.Data.north} S:{neighborCard.Data.south} E:{neighborCard.Data.east} W:{neighborCard.Data.west}");
+            Debug.Log($"[BasicRule] Direction: dx={dx}, dy={dy} → Slot({nx},{ny})");
 
             if (myVal(playedCard) > otherVal(neighborCard))
             {

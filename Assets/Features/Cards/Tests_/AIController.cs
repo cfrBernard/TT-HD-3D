@@ -15,32 +15,36 @@ public class AIController : IPlayerController
 
     public IEnumerator TakeTurn(Player player, BoardManager board)
     {
-        Debug.Log($"[Turn] {player.Name}'s turn (AI)");
+        // Block drag
+        CardDragHandler.DragLocked = true;
+
+        Debug.Log($"[Turn][AI] {player.Name}'s turn");
         yield return new WaitForSeconds(Random.Range(2.5f, 4.5f));
 
         if (player.Hand.Count == 0)
         {
-            Debug.LogWarning("[AI] No cards in hand!");
+            Debug.LogWarning("[Turn][AI] No cards in hand!");
             yield break;
         }
 
-        // 1. Choisir la carte à jouer
+        // --- 1. Choisir la carte à jouer ---
         Card cardToPlay = ChooseCard(player, board);
 
-        // 2. Choisir le slot où la poser
+        // --- 2. Choisir le slot où la poser ---
         (int x, int y)? slot = ChooseSlot(cardToPlay, player, board);
 
         if (slot.HasValue)
         {
-            // 3. Jouer la carte
+            // --- 3. Jouer la carte ---
             PlayCard(cardToPlay, player, board, slot.Value.x, slot.Value.y);
         }
         else
         {
-            Debug.LogWarning("[AI] No valid slot to play this turn.");
+            Debug.LogWarning("[Turn][AI] No valid slot to play this turn.");
         }
 
-        yield return new WaitForSeconds(0.2f);
+        // Active drag
+        CardDragHandler.DragLocked = false;
     }
 
     // Placeholder: pour l'instant choisit une carte random
@@ -73,7 +77,7 @@ public class AIController : IPlayerController
         {
             player.RemoveFromHand(card);
 
-            Debug.Log($"[AI] {player.Name} placed {card.Data.name} at {x},{y}");
+            Debug.Log($"[Turn][AI] {player.Name} placed {card.Data.name} at {x},{y}");
 
             // Animation
             var cardView = viewRegistry.GetView(card);
@@ -86,5 +90,31 @@ public class AIController : IPlayerController
                     animator.AnimatePlay(slotView.transform);
             }
         }
+    }
+
+    // --- MULLIGAN PHASE --- AI
+    public void BeginMulligan(Player player, System.Action onDone)
+    {
+        if (player.Hand.Count > 0 && Random.value > 0.5f)
+        {
+            int idx = Random.Range(0, player.Hand.Count);
+            Card oldCard = player.Hand[idx];
+            Card newCard = player.DrawCard();
+
+            player.HandManager.MulliganCard(oldCard, newCard, idx);
+
+            Debug.Log($"[Mulligan][AI] {player.Name} exchanged '{oldCard.Data.name}' for '{newCard?.Data.name}'");
+        }
+        else
+        {
+            Debug.Log($"[Mulligan][AI] {player.Name} keep his hand");
+        }
+
+        onDone?.Invoke();
+    }
+
+    public void CancelMulligan(Player player)
+    {
+        // AI n’a rien à nettoyer
     }
 }
