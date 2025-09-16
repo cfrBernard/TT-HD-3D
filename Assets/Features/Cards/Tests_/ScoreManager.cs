@@ -1,10 +1,15 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
     private int player1Score;
     private int player2Score;
+
+    // UI Placeholder
+    public TextMeshProUGUI player1Ui;
+    public TextMeshProUGUI Player2Ui;
 
     [SerializeField] private BoardManager board;
     [SerializeField] private MatchManager matchManager;
@@ -69,6 +74,12 @@ public class ScoreManager : MonoBehaviour
     private void UpdateScoreDisplay()
     {
         Debug.Log($"Score => Player1: {player1Score} | Player2: {player2Score}");
+
+        if (player1Ui != null)
+            player1Ui.text = player1Score.ToString();
+
+        if (Player2Ui != null)
+            Player2Ui.text = player2Score.ToString();
     }
 
     public (int player1, int player2) GetScores() => (player1Score, player2Score);
