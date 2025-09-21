@@ -10,6 +10,7 @@ public class CardView : MonoBehaviour
 
     [Header("Owner visuals")]
     public CardOwnerView ownerView;
+    public GameObject hoverFX;
 
     private void Awake()
     {
@@ -25,8 +26,13 @@ public class CardView : MonoBehaviour
         renderer.GetPropertyBlock(mpb);
         mpb.SetTexture("_FrontAlbedo", card.Data.frontAlbedo);
         renderer.SetPropertyBlock(mpb);
-        
+
         ownerView?.Setup(card);
+    }
+
+    public void AnimateDraw(Vector3 fromPos, Transform targetSlot, bool doFlip, float delay)
+    {
+        animator.AnimateDraw(fromPos, targetSlot, doFlip, delay);
     }
 
     public void UpdateOwnerVisual()
@@ -34,8 +40,13 @@ public class CardView : MonoBehaviour
         ownerView?.UpdateOwnerVisual();
     }
 
-    public void AnimateDraw(Vector3 fromPos, Transform targetSlot, bool doFlip, float delay)
+    public void EnableHoverFX()
     {
-        animator.AnimateDraw(fromPos, targetSlot, doFlip, delay);
+        hoverFX.SetActive(true);
+    }
+
+    public void DisableHoverFX()
+    {
+         hoverFX.SetActive(false);
     }
 }

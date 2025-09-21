@@ -7,7 +7,7 @@
 [Ii]deas
 [Uu]ser[Ss]ettings/
 
-# Ignore the folder which contains assets that cannot be publicly distributed. 
+# Ignore the folder which contains assets that cannot be publicly distributed.
 Assets/Private/*
 !Assets/Private/.git
 
@@ -18,6 +18,8 @@ Docs/Private/
 
 .anx
 
+# Some heavy testing assets
+BK_AlchemistHouse
 Hovl Studio
 GothicUI
 

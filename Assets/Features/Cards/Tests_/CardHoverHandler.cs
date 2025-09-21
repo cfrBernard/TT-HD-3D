@@ -7,10 +7,10 @@ public class CardHoverHandler : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private LayerMask cardLayerMask;
-    [SerializeField] private float zoomScale = 1.2f;
-    [SerializeField] private float neighborOffset = 0.3f;
+    [SerializeField] private float hoverOffsetZ = -50f;
+    [SerializeField] private float neighborOffset = 10f;
     [SerializeField] private float animDuration = 0.2f;
-    [SerializeField] private float maxTilt = 10f;
+    [SerializeField] private float maxTilt = 100f;
 
     private Camera cam;
     private CardView cardView;
@@ -19,7 +19,7 @@ public class CardHoverHandler : MonoBehaviour
     private int slotIndex;
 
     private bool isHover = false;
-    private Vector3 originalScale;
+    private Vector3 originalPosition;
     private Quaternion originalRotation;
     private Vector3[] slotOriginalPositions;
 
@@ -27,23 +27,35 @@ public class CardHoverHandler : MonoBehaviour
     {
         cam = Camera.main;
         cardView = GetComponent<CardView>();
-        slot = transform.parent;
-        handLayout = slot.GetComponentInParent<HandLayout>();
+    }
 
-        originalScale = transform.localScale;
-        originalRotation = transform.localRotation;
+    public void InitHover(HandLayout layout, Transform targetSlot)
+    {
+        handLayout = layout;
+        slot = targetSlot;
+
+        if (handLayout == null || slot == null)
+        {
+            Debug.LogError($"[CardHoverHandler] InitHover échoué pour '{cardView.Card?.Data.name}' → layout ou slot null.");
+            return;
+        }
+
+        // force 0,0,0 (pos/rotate)
+        originalPosition = Vector3.zero;
+        originalRotation = Quaternion.identity; 
 
         // Sauvegarde des pos initiales des slots
         slotOriginalPositions = new Vector3[handLayout.slots.Length];
         for (int i = 0; i < handLayout.slots.Length; i++)
             slotOriginalPositions[i] = handLayout.slots[i].localPosition;
 
-        Debug.Log($"[CardHoverHandler] Awake -> card='{cardView.Card?.Data.name}' slots={handLayout.slots.Length}");
+        Debug.Log($"[CardHoverHandler] InitHover -> card='{cardView.Card?.Data.name}' slot={slot.name} slots={handLayout.slots.Length}");
     }
 
     void Update()
     {
-        // Check hover via raycast
+        if (handLayout == null) return; // pas encore init
+
         Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 10f, cardLayerMask))
         {
@@ -55,7 +67,7 @@ public class CardHoverHandler : MonoBehaviour
                     EnterHover();
                 }
 
-                UpdateHoverTilt();
+                // UpdateHoverTilt(); --- TESTING ---
                 return;
             }
         }
@@ -74,16 +86,15 @@ public class CardHoverHandler : MonoBehaviour
 
         Debug.Log($"[CardHoverHandler] EnterHover slotIndex={slotIndex}");
 
-        // Zoom
-        transform.DOScale(originalScale * zoomScale, animDuration);
+        // Décalage Z au hover (~zoom) --- TESTING ---
+        // transform.DOLocalMoveZ(originalPosition.z + hoverOffsetZ, animDuration);
 
         // Décale voisins
-        OffsetNeighbor(slotIndex - 1, -neighborOffset);
+        // OffsetNeighbor(slotIndex - 1, -neighborOffset); --- TESTING ---
         OffsetNeighbor(slotIndex + 1, neighborOffset);
 
-        // FX / SFX
-        // cardView.PlayHoverFx();
-        // cardView.PlayHoverSfx();
+        // FX placeholder
+        cardView.EnableHoverFX();
     }
 
     private void ExitHover()
@@ -92,8 +103,8 @@ public class CardHoverHandler : MonoBehaviour
 
         Debug.Log($"[CardHoverHandler] ExitHover slotIndex={slotIndex}");
 
-        // Reset scale & rotation
-        transform.DOScale(originalScale, animDuration);
+        // Revenir à la position originale
+        transform.DOLocalMove(originalPosition, animDuration);
         transform.DOLocalRotateQuaternion(originalRotation, animDuration);
 
         // Reset slots
@@ -101,29 +112,26 @@ public class CardHoverHandler : MonoBehaviour
         ResetSlot(slotIndex + 1);
     }
 
-    private void UpdateHoverTilt()
-    {
-        Vector2 mouse = Mouse.current.position.ReadValue();
-        Vector2 screenPos = cam.WorldToScreenPoint(transform.position);
-        Vector2 delta = (mouse - screenPos) / 100f;
-
-        float rotX = Mathf.Clamp(-delta.y * maxTilt, -maxTilt, maxTilt);
-        float rotY = Mathf.Clamp(delta.x * maxTilt, -maxTilt, maxTilt);
-
-        transform.localRotation = Quaternion.Euler(rotX, rotY, 0f);
-
-        Debug.Log($"[CardHoverHandler] Tilt -> rotX={rotX:F2} rotY={rotY:F2}");
-    }
+    //private void UpdateHoverTilt() --- TESTING ---
+    //{
+    //    if (slot == null) return;
+    //
+    //    Vector2 mouse = Mouse.current.position.ReadValue();
+    //    Vector2 screenPos = cam.WorldToScreenPoint(slot.position);
+    //    Vector2 delta = (mouse - screenPos) / 100f;
+    //
+    //    float rotX = Mathf.Clamp(-delta.y * maxTilt, -maxTilt, maxTilt);
+    //    float rotY = Mathf.Clamp(delta.x * maxTilt, -maxTilt, maxTilt);
+    //
+    //    slot.localRotation = Quaternion.Euler(rotX, rotY, 0f);
+    //}
 
     private void OffsetNeighbor(int idx, float offset)
     {
         if (idx < 0 || idx >= handLayout.slots.Length) return;
         var slotT = handLayout.slots[idx];
 
-        Debug.Log($"[CardHoverHandler] OffsetNeighbor idx={idx} offset={offset}");
-
-        // Move avec DO
-        slotT.DOLocalMoveX(slotOriginalPositions[idx].x + offset, animDuration);
+        slotT.DOLocalMoveY(slotOriginalPositions[idx].y + offset, animDuration);
     }
 
     private void ResetSlot(int idx)
@@ -131,9 +139,10 @@ public class CardHoverHandler : MonoBehaviour
         if (idx < 0 || idx >= handLayout.slots.Length) return;
         var slotT = handLayout.slots[idx];
 
-        Debug.Log($"[CardHoverHandler] ResetSlot idx={idx}");
+        slotT.DOLocalMoveY(slotOriginalPositions[idx].y, animDuration);
+        slot.DOLocalRotateQuaternion(Quaternion.identity, animDuration);
 
-        // Reviens à la pos d’origine
-        slotT.DOLocalMove(slotOriginalPositions[idx], animDuration);
+        // FX placeholder
+        cardView.DisableHoverFX();
     }
 }

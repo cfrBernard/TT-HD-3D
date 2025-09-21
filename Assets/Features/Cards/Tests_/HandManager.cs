@@ -45,6 +45,11 @@ public class HandManager : MonoBehaviour
 
             // Animation vers slot + flip
             view.AnimateDraw(deckPosition.position, targetSlot, isPlayer1, delay);
+
+            // Hover handler
+            var hover = cardGO.GetComponent<CardHoverHandler>();
+            if (hover != null)
+                hover.InitHover(handLayout, targetSlot);
         }
     }
 
@@ -78,6 +83,11 @@ public class HandManager : MonoBehaviour
 
                 Transform targetSlot = handLayout.slots[slotIndex];
                 newView.AnimateDraw(deckPosition.position, targetSlot, isPlayer1, 0f);
+
+                // Hover handler
+                var hover = cardGO.GetComponent<CardHoverHandler>();
+                if (hover != null)
+                    hover.InitHover(handLayout, targetSlot);
 
                 Debug.Log($"[HandManager][Hand Debug] {player.Name} hand after mulligan : " + string.Join(", ", player.Hand.Select(c => c.Data.name)));
             }
