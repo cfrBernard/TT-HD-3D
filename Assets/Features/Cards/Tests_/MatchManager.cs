@@ -60,13 +60,17 @@ public class MatchManager : MonoBehaviour
 
     IEnumerator GameLoop()
     {
-        // block drag ???
+        // block drag && hover ???
         CardDragHandler.DragLocked = true;
+        CardHoverHandler.HoverLocked = true;
 
         // --- 1. Draw hands ---
         player1Hand.DrawStartingHand();
         player2Hand.DrawStartingHand();
         yield return new WaitForSeconds(3f); // (int) = HandManager.DrawStartingHand.Delay *5 + 0.5
+
+        // active hover ???
+        CardHoverHandler.HoverLocked = false;
 
         // --- 2. Mulligan phase ---
         yield return RunMulliganPhase(player1, player2, 10f);

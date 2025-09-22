@@ -6,13 +6,13 @@ public class CardDragHandler : MonoBehaviour
     public static event System.Action<Card> OnCardPlaced;
     public static Player CurrentPlayerTurn;
     public static bool DragLocked = false;
+    public bool dragging;
 
     [SerializeField] private LayerMask cardLayerMask;
     [SerializeField] private LayerMask slotLayerMask;
 
     private Camera cam;
     private CardView cardView;
-    private bool dragging;
     private bool isPlaced = false;
 
     // Rollback
@@ -27,12 +27,15 @@ public class CardDragHandler : MonoBehaviour
 
     void Update()
     {
+        // --- Conditions ---
         if (DragLocked) return;
+
+        if (cardView.Card.IsOnBoard) return;
 
         if (CurrentPlayerTurn != null && cardView.Card.Owner != CurrentPlayerTurn)
             return;
 
-        // clic gauche down -> start drag
+        // --- Vérif --- clic gauche down -> start drag
         if (Mouse.current.leftButton.wasPressedThisFrame && !isPlaced)
         {
             Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -63,14 +66,27 @@ public class CardDragHandler : MonoBehaviour
 
                     if (placed)
                     {
+                        // BoardSlot = new parent (over HandSlot, needed for hover.SlotHasCard condition)
+                        transform.SetParent(slotView.transform, true);
+
                         transform.position = slotView.transform.position;
                         isPlaced = true;
+
+                        // reset hover state avant désactivation
+                        var hover = GetComponent<CardHoverHandler>();
+                        if (hover != null)
+                        {
+                            cardView.DisableHoverFX();
+                            hover.ResetNeighborsOnly(); // reset slots voisins
+                            hover.enabled = false;      // désac le hover
+                        }
 
                         OnCardPlaced?.Invoke(cardView.Card);
 
                         Debug.Log($"[CardDragHandler] Card '{cardView.Card.Data.name}' placed at {slotView.Slot.X},{slotView.Slot.Y}");
                         return; // fin -> pas de rollback
                     }
+
                 }
             }
 

@@ -17,6 +17,7 @@ public class AIController : IPlayerController
     {
         // Block drag
         CardDragHandler.DragLocked = true;
+        // CardHoverHandler.HoverLocked = true; --- TESTING ---
 
         Debug.Log($"[Turn][AI] {player.Name}'s turn");
         yield return new WaitForSeconds(Random.Range(2.5f, 4.5f));
@@ -45,6 +46,7 @@ public class AIController : IPlayerController
 
         // Active drag
         CardDragHandler.DragLocked = false;
+        // CardHoverHandler.HoverLocked = false; --- TESTING ---
     }
 
     // Placeholder: pour l'instant choisit une carte random

@@ -54,7 +54,7 @@ public class CardAnimator : MonoBehaviour
         // Vérifie si la carte est à dos (y -180)
         bool isBack = Mathf.Approximately(transform.localRotation.eulerAngles.y, 180f);
 
-        // Dans tous les cas, on recale le parent et la position -> !! besoin de faire ca sur le player aussi – donc besoin de refaire les rotate Slot/CardPrefab !!
+        // Dans tous les cas, on recale le parent et la position
         seq.AppendCallback(() =>
         {
             transform.SetParent(slot, true);

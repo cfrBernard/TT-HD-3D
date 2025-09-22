@@ -23,6 +23,8 @@ public class CardHoverHandler : MonoBehaviour
     private Quaternion originalRotation;
     private Vector3[] slotOriginalPositions;
 
+    public static bool HoverLocked = false;
+
     void Awake()
     {
         cam = Camera.main;
@@ -42,7 +44,7 @@ public class CardHoverHandler : MonoBehaviour
 
         // force 0,0,0 (pos/rotate)
         originalPosition = Vector3.zero;
-        originalRotation = Quaternion.identity; 
+        originalRotation = Quaternion.identity;
 
         // Sauvegarde des pos initiales des slots
         slotOriginalPositions = new Vector3[handLayout.slots.Length];
@@ -54,8 +56,20 @@ public class CardHoverHandler : MonoBehaviour
 
     void Update()
     {
+        // --- Conditions ---
         if (handLayout == null) return; // pas encore init
 
+        if (HoverLocked) return;
+
+        if (cardView.Card.IsOnBoard) return;
+
+        if (!(cardView.Card.Owner.Controller is HumanController)) return;
+
+        if (GetComponent<CardDragHandler>()?.dragging == true) return;
+
+        // if (CardDragHandler.CurrentPlayerTurn != null && cardView.Card.Owner != CardDragHandler.CurrentPlayerTurn) return; --- TESTING ---
+
+        // --- Vérif ---
         Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 10f, cardLayerMask))
         {
@@ -131,6 +145,8 @@ public class CardHoverHandler : MonoBehaviour
         if (idx < 0 || idx >= handLayout.slots.Length) return;
         var slotT = handLayout.slots[idx];
 
+        if (!SlotHasCard(slotT)) return;
+
         slotT.DOLocalMoveY(slotOriginalPositions[idx].y + offset, animDuration);
     }
 
@@ -139,10 +155,31 @@ public class CardHoverHandler : MonoBehaviour
         if (idx < 0 || idx >= handLayout.slots.Length) return;
         var slotT = handLayout.slots[idx];
 
+        if (!SlotHasCard(slotT)) return;
+
         slotT.DOLocalMoveY(slotOriginalPositions[idx].y, animDuration);
         slot.DOLocalRotateQuaternion(Quaternion.identity, animDuration);
 
         // FX placeholder
         cardView.DisableHoverFX();
+    }
+
+    public void ResetNeighborsOnly()
+    {
+        if (!isHover) return;
+
+        ResetSlot(slotIndex - 1);
+        ResetSlot(slotIndex + 1);
+        
+        // FX placeholder
+        cardView.DisableHoverFX();
+
+        isHover = false;
+    }
+    
+    private bool SlotHasCard(Transform slotT)
+    {
+        // Exemple simple : regarde si le slot a un enfant "CardView"
+        return slotT.childCount > 0 && slotT.GetComponentInChildren<CardView>() != null;
     }
 }

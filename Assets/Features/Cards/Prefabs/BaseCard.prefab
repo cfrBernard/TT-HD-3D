@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34edfaf27b6e3e849aa9283bfee287cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardDragHandler
+  dragging: 0
   cardLayerMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -10479,6 +10480,10 @@ PrefabInstance:
     - target: {fileID: 8445763112410648400, guid: 45e0f06c750176947862c10346226439, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.15686274
+      objectReference: {fileID: 0}
+    - target: {fileID: 8817328400084507686, guid: 45e0f06c750176947862c10346226439, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

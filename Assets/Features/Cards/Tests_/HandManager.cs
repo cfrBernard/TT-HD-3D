@@ -55,12 +55,23 @@ public class HandManager : MonoBehaviour
 
     public void MulliganCard(Card oldCard, Card newCard, int slotIndex)
     {
+        // block hover
+        CardHoverHandler.HoverLocked = true;
+
         Player.RemoveFromHand(oldCard);
         var oldView = registry.GetView(oldCard);
         if (oldView == null)
         {
             Debug.LogWarning("[HandManager] Old card view not found");
             return;
+        }
+
+        // hover handlder
+        var oldHover = oldView.GetComponent<CardHoverHandler>();
+        if (oldHover != null)
+        {
+            oldHover.ResetNeighborsOnly(); // reset slots voisins
+            oldHover.enabled = false;      // désac le hover
         }
 
         var animator = oldView.GetComponent<CardAnimator>();
@@ -87,8 +98,22 @@ public class HandManager : MonoBehaviour
                 // Hover handler
                 var hover = cardGO.GetComponent<CardHoverHandler>();
                 if (hover != null)
+                {
                     hover.InitHover(handLayout, targetSlot);
 
+                    // Désactive temporairement
+                    hover.enabled = false;
+
+                    // Réactive après un delay pour anim
+                    DOVirtual.DelayedCall(0.5f, () =>
+                    {
+                        hover.enabled = true;
+
+                        // active hover
+                        CardHoverHandler.HoverLocked = false;
+                    });
+                }
+                
                 Debug.Log($"[HandManager][Hand Debug] {player.Name} hand after mulligan : " + string.Join(", ", player.Hand.Select(c => c.Data.name)));
             }
         });
