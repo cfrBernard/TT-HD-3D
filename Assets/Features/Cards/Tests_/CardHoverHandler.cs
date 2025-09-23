@@ -121,6 +121,9 @@ public class CardHoverHandler : MonoBehaviour
         transform.DOLocalMove(originalPosition, animDuration);
         transform.DOLocalRotateQuaternion(originalRotation, animDuration);
 
+        // FX placeholder
+        cardView.DisableHoverFX();
+
         // Reset slots
         ResetSlot(slotIndex - 1);
         ResetSlot(slotIndex + 1);
@@ -159,9 +162,6 @@ public class CardHoverHandler : MonoBehaviour
 
         slotT.DOLocalMoveY(slotOriginalPositions[idx].y, animDuration);
         slot.DOLocalRotateQuaternion(Quaternion.identity, animDuration);
-
-        // FX placeholder
-        cardView.DisableHoverFX();
     }
 
     public void ResetNeighborsOnly()
@@ -179,7 +179,6 @@ public class CardHoverHandler : MonoBehaviour
     
     private bool SlotHasCard(Transform slotT)
     {
-        // Exemple simple : regarde si le slot a un enfant "CardView"
         return slotT.childCount > 0 && slotT.GetComponentInChildren<CardView>() != null;
     }
 }
