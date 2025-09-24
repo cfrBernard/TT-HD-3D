@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SameRule // flip les cartes dont le chiffre correspond à l'opposé de la carte jouée
 {
-    public void Apply(BoardManager board, int x, int y, Card playedCard, List<Card> flippedThisTurn)
+    public void Apply(IBoard board, int x, int y, Card playedCard, List<Card> flippedThisTurn)
     {
         var directions = new (int dx, int dy, Func<Card, int> myVal, Func<Card, int> otherVal)[]
         {

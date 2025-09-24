@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour
+public class BoardManager : MonoBehaviour, IBoard
 {
     public const int SIZE = 3;
     private BoardSlot[,] slots = new BoardSlot[SIZE, SIZE];
@@ -39,6 +39,19 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public IEnumerable<(int x, int y)> GetFreeSlots()
+    {
+        for (int x = 0; x < SIZE; x++)
+        {
+            for (int y = 0; y < SIZE; y++)
+            {
+                var slot = GetSlot(x, y);
+                if (slot != null && slot.IsEmpty)
+                    yield return (x, y);
+            }
+        }
+    }
+
     public BoardSlot GetSlotOfCard(Card card)
     {
         for (int x = 0; x < SIZE; x++)
@@ -63,16 +76,26 @@ public class BoardManager : MonoBehaviour
             Debug.LogWarning($"[BoardManager] Slot {x},{y} already occupied.");
             return false;
         }
-    
+
         slot.PlaceCard(card);
-    
-        // 👇 très important : on marque la carte comme jouée
+
+        // Marque la carte comme jouée
         card.MarkAsOnBoard();
-    
+
         OnCardPlaced?.Invoke(x, y, card);
-    
+
         Debug.Log($"[BoardManager] {card.Data.name} placed at {x},{y} by {card.Owner}");
         return true;
     }
-
+    
+    // --- Implémentation explicite de IBoard (délègue aux méthodes existantes) ---
+    IBoardSlot IBoard.GetSlot(int x, int y) => GetSlot(x, y);
+    IEnumerable<IBoardSlot> IBoard.GetAllSlots()
+    {
+        foreach (var s in GetAllSlots())
+            yield return s;
+    }
+    bool IBoard.TryPlaceCard(int x, int y, Card card) => TryPlaceCard(x, y, card);
+    IBoardSlot IBoard.GetSlotOfCard(Card card) => GetSlotOfCard(card);
+    IEnumerable<(int x, int y)> IBoard.GetFreeSlots() => GetFreeSlots();
 }

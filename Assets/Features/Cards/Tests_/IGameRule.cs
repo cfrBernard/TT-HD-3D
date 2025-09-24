@@ -1,4 +1,4 @@
 public interface IGameRule
 {
-    void Apply(BoardManager board, int x, int y, Card playedCard);
+    void Apply(IBoard board, int x, int y, Card playedCard);
 }

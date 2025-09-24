@@ -3,7 +3,6 @@ public class Card
     public CardData Data { get; private set; }
     public Player Owner { get; set; }
 
-    // 👇 nouveau flag
     public bool IsOnBoard { get; private set; }
 
     public Card(CardData data, Player owner)
@@ -24,9 +23,16 @@ public class Card
         GameEventBus.Publish(new CardOwnerChanged(this, oldOwner, newOwner));
     }
 
-    // 👇 appelé par BoardManager quand la carte est posée
+    // Appelé par BoardManager (et sa simu) quand la carte est posée
     public void MarkAsOnBoard()
     {
         IsOnBoard = true;
+    }
+
+    public Card CloneForSim()
+    {
+        var newCard = new Card(this.Data, this.Owner);
+        // Copier l’état "déjà posée ou pas" ???
+        return newCard;
     }
 }

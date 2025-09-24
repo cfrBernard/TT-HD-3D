@@ -1,4 +1,4 @@
-public class BoardSlot
+public class BoardSlot : IBoardSlot
 {
     public int X { get; private set; }
     public int Y { get; private set; }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AIController : IPlayerController
@@ -20,7 +19,7 @@ public class AIController : IPlayerController
         // CardHoverHandler.HoverLocked = true; --- TESTING ---
 
         Debug.Log($"[Turn][AI] {player.Name}'s turn");
-        yield return new WaitForSeconds(Random.Range(2.5f, 4.5f));
+        yield return new WaitForSeconds(Random.Range(1.5f, 2.5f));
 
         if (player.Hand.Count == 0)
         {
@@ -28,51 +27,91 @@ public class AIController : IPlayerController
             yield break;
         }
 
-        // --- 1. Choisir la carte à jouer ---
-        Card cardToPlay = ChooseCard(player, board);
+        // --- 1. Trouver le meilleur coup ---
+        var bestMove = FindBestMove(player, board);
 
-        // --- 2. Choisir le slot où la poser ---
-        (int x, int y)? slot = ChooseSlot(cardToPlay, player, board);
-
-        if (slot.HasValue)
+        if (bestMove.HasValue)
         {
-            // --- 3. Jouer la carte ---
-            PlayCard(cardToPlay, player, board, slot.Value.x, slot.Value.y);
+            var (card, x, y) = bestMove.Value;
+            PlayCard(card, player, board, x, y);
         }
         else
         {
-            Debug.LogWarning("[Turn][AI] No valid slot to play this turn.");
+            Debug.LogWarning("[Turn][AI] No valid move found.");
         }
 
-        // Active drag
+        // Unlock drag
         CardDragHandler.DragLocked = false;
         // CardHoverHandler.HoverLocked = false; --- TESTING ---
     }
 
-    // Placeholder: pour l'instant choisit une carte random
-    private Card ChooseCard(Player player, BoardManager board)
+    // =====================================================
+    // === AI
+    // =====================================================
+    private (Card, int, int)? FindBestMove(Player player, BoardManager board)
     {
-        return player.Hand[Random.Range(0, player.Hand.Count)];
-    }
+        float bestScore = float.NegativeInfinity;
+        (Card, int, int)? bestMove = null;
 
-    // Placeholder: pour l'instant choisit un slot libre random
-    private (int x, int y)? ChooseSlot(Card card, Player player, BoardManager board)
-    {
-        var freeSlots = new List<(int x, int y)>();
-        for (int x = 0; x < BoardManager.SIZE; x++)
+        // Convertir une fois le board courant en état
+        var baseState = BoardConverter.ToState(board);
+
+        foreach (var card in player.Hand)
         {
-            for (int y = 0; y < BoardManager.SIZE; y++)
+            foreach (var (x, y) in baseState.GetFreeSlots())
             {
-                if (board.GetSlot(x, y).IsEmpty)
-                    freeSlots.Add((x, y));
+                // --- Simulation ---
+                var simState = baseState.Clone();
+                var simManager = new SimBoardManager(simState);
+
+                var simCard = card.CloneForSim();
+                simCard.Owner = player;
+
+                if (!simManager.TryPlaceCard(x, y, simCard))
+                    continue;
+
+                var rules = new RuleEngine();
+                rules.Resolve(simManager, x, y, simCard);
+
+                float score = EvaluateBoard(simState, player);
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestMove = (card, x, y);
+                }
             }
         }
 
-        if (freeSlots.Count == 0) return null;
-
-        return freeSlots[Random.Range(0, freeSlots.Count)];
+        return bestMove;
     }
 
+    private float EvaluateBoard(BoardState state, Player me)
+    {
+        int myCards = 0, enemyCards = 0;
+
+        foreach (var c in state.GetAllCards())
+        {
+            if (c.Owner == me) myCards++;
+            else enemyCards++;
+        }
+
+        float score = myCards - enemyCards;
+
+        // Exemple d’heuristique :
+        foreach (var (x, y) in state.GetFreeSlots())
+        {
+            // Si une case libre est un coin -> valeur stratégique
+            if ((x == 0 || x == BoardState.SIZE - 1) && (y == 0 || y == BoardState.SIZE - 1))
+                score += 0.2f;
+        }
+
+        return score;
+    }
+
+    // =====================================================
+    // === ACTIONS
+    // =====================================================
     private void PlayCard(Card card, Player player, BoardManager board, int x, int y)
     {
         if (board.TryPlaceCard(x, y, card))
@@ -94,7 +133,9 @@ public class AIController : IPlayerController
         }
     }
 
-    // --- MULLIGAN PHASE --- AI
+    // =====================================================
+    // === MULLIGAN PHASE
+    // =====================================================
     public void BeginMulligan(Player player, System.Action onDone)
     {
         if (player.Hand.Count > 0 && Random.value > 0.5f)
@@ -109,7 +150,7 @@ public class AIController : IPlayerController
         }
         else
         {
-            Debug.Log($"[Mulligan][AI] {player.Name} keep his hand");
+            Debug.Log($"[Mulligan][AI] {player.Name} keeps his hand");
         }
 
         onDone?.Invoke();

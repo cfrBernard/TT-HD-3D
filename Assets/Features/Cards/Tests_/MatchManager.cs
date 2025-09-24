@@ -60,7 +60,7 @@ public class MatchManager : MonoBehaviour
 
     IEnumerator GameLoop()
     {
-        // block drag && hover ???
+        // Block drag && hover ???
         CardDragHandler.DragLocked = true;
         CardHoverHandler.HoverLocked = true;
 
@@ -69,7 +69,7 @@ public class MatchManager : MonoBehaviour
         player2Hand.DrawStartingHand();
         yield return new WaitForSeconds(3f); // (int) = HandManager.DrawStartingHand.Delay *5 + 0.5
 
-        // active hover ???
+        // Unlock hover ???
         CardHoverHandler.HoverLocked = false;
 
         // --- 2. Mulligan phase ---
@@ -81,18 +81,18 @@ public class MatchManager : MonoBehaviour
 
         scoreManager.Init();
 
-        // active drag ???
+        // Unlock drag ???
         CardDragHandler.DragLocked = false;
 
         // --- 4. Main loop ---
         while (!board.IsFull())
         {
-            // block drag
+            // Block drag
             CardDragHandler.CurrentPlayerTurn = current;
 
             yield return current.Controller.TakeTurn(current, board);
 
-            // switch player
+            // Switch player
             Player temp = current;
             current = other;
             other = temp;

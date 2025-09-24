@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CardViewRegistry : MonoBehaviour
 {
-    // --- Instance ---
+    // --- Singleton ---
     public static CardViewRegistry Instance { get; private set; }
 
     private void Awake()
@@ -53,8 +53,13 @@ public class CardViewRegistry : MonoBehaviour
             Debug.Log($"[Registry] Found view for card '{card.Data.name}' for owner {card.Owner}.");
             return view;
         }
-        Debug.LogError($"[Registry] No view found for card '{card.Data.name}'.");
+
+        // Pendant simulation (IA, clones)
+        if (Application.isPlaying)
+        {
+            Debug.LogWarning($"[Registry] No view found for card '{card.Data.name}'. Probably a clone used in simulation.");
+        }
+
         return null;
     }
-
 }

@@ -34,7 +34,9 @@ public class HumanController : IPlayerController
         cardPlacedThisTurn = true;
     }
 
-    // --- MULLIGAN PHASE --- HUMAN
+    // =====================================================
+    // === MULLIGAN PHASE
+    // =====================================================
     public void BeginMulligan(Player player, System.Action onDone)
     {
         mulliganDone = onDone;

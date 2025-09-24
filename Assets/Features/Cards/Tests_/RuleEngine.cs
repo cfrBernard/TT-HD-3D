@@ -1,11 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 
-/// <summary>
-/// Gère l'application des règles avec le flow classique Triple Triad:
-/// Same → Plus → Combo → BasicCapture
-/// </summary>
-public class RuleEngine
+public class RuleEngine // Gère l'application des règles avec le flow Triple Triad
 {
     public bool enableSame = true;
     public bool enablePlus = true;
@@ -28,7 +23,8 @@ public class RuleEngine
         comboRule = new ComboRule(this, basicRule);
     }
 
-    public void Resolve(BoardManager board, int x, int y, Card playedCard)
+    // Flow Triple Triad : Same -> Plus -> Combo -> BasicCapture
+    public void Resolve(IBoard board, int x, int y, Card playedCard)
     {
         flippedThisTurn.Clear();
 

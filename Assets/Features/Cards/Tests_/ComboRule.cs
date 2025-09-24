@@ -11,7 +11,7 @@ public class ComboRule // applique BasicCapture sur toutes les cartes flipées p
         this.basicRule = basic;
     }
 
-    public void Apply(BoardManager board, List<Card> flippedThisTurn)
+    public void Apply(IBoard board, List<Card> flippedThisTurn)
     {
         foreach (var card in flippedThisTurn)
         {

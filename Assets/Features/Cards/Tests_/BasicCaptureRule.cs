@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BasicCaptureRule : IGameRule
 {
-    public void Apply(BoardManager board, int x, int y, Card playedCard)
+    public void Apply(IBoard board, int x, int y, Card playedCard)
     {
         var directions = new (int dx, int dy, Func<Card,int> myValue, Func<Card,int> otherValue)[]
         {
@@ -18,7 +18,6 @@ public class BasicCaptureRule : IGameRule
             var nx = x + dx;
             var ny = y + dy;
 
-            // skip si hors board
             if (nx < 0 || nx >= BoardManager.SIZE || ny < 0 || ny >= BoardManager.SIZE)
                 continue;
 
