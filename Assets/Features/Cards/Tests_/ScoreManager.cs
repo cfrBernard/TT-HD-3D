@@ -9,7 +9,7 @@ public class ScoreManager : MonoBehaviour
 
     // UI Placeholder
     public TextMeshProUGUI player1Ui;
-    public TextMeshProUGUI Player2Ui;
+    public TextMeshProUGUI player2Ui;
 
     [SerializeField] private BoardManager board;
     [SerializeField] private MatchManager matchManager;
@@ -78,8 +78,8 @@ public class ScoreManager : MonoBehaviour
         if (player1Ui != null)
             player1Ui.text = player1Score.ToString();
 
-        if (Player2Ui != null)
-            Player2Ui.text = player2Score.ToString();
+        if (player2Ui != null)
+            player2Ui.text = player2Score.ToString();
     }
 
     public (int player1, int player2) GetScores() => (player1Score, player2Score);
