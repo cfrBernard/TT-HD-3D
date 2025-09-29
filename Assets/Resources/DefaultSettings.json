@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "same": true,
+    "plus": true,
+    "combo": true,
+    "coinToss": false
+  },
+  "video": {
+    "resolution": "1920x1080",
+    "fullscreen": true,
+    "targetFramerate": "60FPS",
+    "vsync": false
+  },
+  "audio": {
+    "masterVolume": 0,
+    "musicVolume": 100,
+    "sfxVolume": 100,
+    "uiVolume": 100
+  }
+}

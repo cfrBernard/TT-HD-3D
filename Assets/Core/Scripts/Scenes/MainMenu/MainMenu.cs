@@ -1,26 +1,27 @@
 using UnityEngine;
 using System.Collections;
 
-public class LoadingBootstrap : MonoBehaviour // PLACEHOLDER TODO : REFz3?
+public class MainMenu : MonoBehaviour // PLACEHOLDER TODO : REFz3
 {
+    // UI
     public CanvasGroup fadeCanvasGroup;
     public float fadeDuration = 1f;
 
     private void Start()
     {
-        StartCoroutine(LoadTargetScene());
+        fadeCanvasGroup.gameObject.SetActive(true);
+        StartCoroutine(FadeIn());
     }
 
-    private IEnumerator LoadTargetScene()
+    private IEnumerator TransitionToLoadingScene()
     {
+        fadeCanvasGroup.gameObject.SetActive(true);
+        
         yield return FadeOut();
-        yield return new WaitForSeconds(0.5f);
-        string target = SceneManager.Instance.GetTargetSceneToLoad();
-        yield return SceneManager.Instance.LoadSceneAsync(target, true);
-        yield return FadeIn();
-        yield return new WaitForSeconds(0.5f);
 
-        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("LoadingScene");
+        yield return new WaitForSeconds(1f);
+
+        UIManager.Instance.OnPlayGame();
     }
 
     private IEnumerator FadeOut()
@@ -45,5 +46,22 @@ public class LoadingBootstrap : MonoBehaviour // PLACEHOLDER TODO : REFz3?
             yield return null;
         }
         fadeCanvasGroup.alpha = 0;
+        fadeCanvasGroup.gameObject.SetActive(false);
+    }
+
+    // Buttons
+    public void PlayGame()
+    {
+        StartCoroutine(TransitionToLoadingScene());
+    }
+
+    public void OpenSettings()
+    {
+        UIManager.Instance.OnOpenSettings();
+    }
+
+    public void ExitGame()
+    {
+        UIManager.Instance.OnExitGame();
     }
 }

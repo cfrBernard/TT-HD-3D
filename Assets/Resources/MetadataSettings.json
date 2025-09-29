@@ -1,0 +1,82 @@
+{
+  "rules": {
+    "same": {
+      "label": "Same",
+      "description": "If two or more side's numbers are equal to their opposing numbers, then those cards are flipped.",
+      "type": "toggle"
+    },
+    "plus": {
+      "label": "Plus",
+      "description": "If the sum of one side and its opposing number is equal to the sum of another side and its opposing number, the cards are flipped.",
+      "type": "toggle"
+    },
+    "combo": {
+      "label": "Combo",
+      "description": "If cards are flipped with the Same or Plus rules, they will act as if they were newly placed and will flip cards around them. Only the basic greater than rule applies for these.",
+      "type": "toggle"
+    },
+    "coinToss": {
+      "label": "Coin Toss",
+      "description": "If enabled, each player gets one coin toss per game. The coin will land on a random board spot. If there's a card on that spot, it will be flipped, whether it's yours or your opponents. This also counts as your turn. ",
+      "type": "toggle"
+    }
+  },
+  "video": {
+    "resolution": {
+      "label": "Resolution",
+      "description": "Sets the display resolution.",
+      "type": "dropdown",
+      "options": ["1280x720", "1920x1080", "2560x1440", "3840x2160"]
+    },
+    "fullscreen": {
+      "label": "Fullscreen",
+      "description": "Enable or disable fullscreen mode.",
+      "type": "toggle"
+    },
+    "targetFramerate": {
+      "label": "Target Framerate",
+      "description": "Limits the game's framerate.",
+      "type": "dropdown",
+      "options": ["30FPS", "60FPS", "120FPS", "144FPS", "240FPS", "Unlimited"]
+    },
+    "vsync": {
+      "label": "V-Sync",
+      "description": "Synchronize the framerate with your monitor's refresh rate.",
+      "type": "toggle"
+    }
+  },
+  "audio": {
+    "masterVolume": {
+      "label": "Master Volume",
+      "description": "Controls the overall game audio.",
+      "type": "slider",
+      "min": 0,
+      "max": 100,
+      "decimal": false
+    },
+    "musicVolume": {
+      "label": "Music Volume",
+      "description": "Controls music audio level.",
+      "type": "slider",
+      "min": 0,
+      "max": 100,
+      "decimal": false
+    },
+    "sfxVolume": {
+      "label": "Effects Volume",
+      "description": "Controls sound effects volume.",
+      "type": "slider",
+      "min": 0,
+      "max": 100,
+      "decimal": false
+    },
+    "uiVolume": {
+      "label": "Interface Volume",
+      "description": "Controls user interface sound volume.",
+      "type": "slider",
+      "min": 0,
+      "max": 100,
+      "decimal": false
+    }
+  }
+}
