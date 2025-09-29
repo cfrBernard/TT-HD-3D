@@ -18,6 +18,11 @@ Docs/Private/
 
 .anx
 
+Assets/Project/Art/*.jpg
+Assets/Project/Art/*.jpg.meta
+Assets/Project/Art/*.png
+Assets/Project/Art/*.png.meta
+
 # Some heavy testing assets
 BK_AlchemistHouse
 Hovl Studio
