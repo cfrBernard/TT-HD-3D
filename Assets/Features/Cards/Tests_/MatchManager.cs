@@ -55,7 +55,7 @@ public class MatchManager : MonoBehaviour
         player1.HandManager = player1Hand;
         player2.HandManager = player2Hand;
 
-        StartCoroutine(GameLoop());
+        // StartCoroutine(GameLoop()); GAME FLOW TESTING 
     }
 
     IEnumerator GameLoop()

@@ -18,5 +18,5 @@ public static class GlobalConfigs
     }
 
     // call e.g. inputActions = GlobalConfigs.Input.inputActions;
+    // call e.g. audioMixer = GlobalConfigs.Audio.mainMixer;
 }
-

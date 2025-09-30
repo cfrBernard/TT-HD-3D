@@ -1,30 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
-public class MainMenu : MonoBehaviour // PLACEHOLDER TODO : REFz3
+public class MatchController : MonoBehaviour // PLACEHOLDER TODO : REFz3
 {
-    // UI
     public CanvasGroup fadeCanvasGroup;
     public float fadeDuration = 1f;
 
     private void Start()
     {
         fadeCanvasGroup.gameObject.SetActive(true);
-        StartCoroutine(FadeIn());
+        StartCoroutine(FadeOut());
     }
 
-    private IEnumerator TransitionToLoadingScene()
-    {
-        fadeCanvasGroup.gameObject.SetActive(true);
-        
-        yield return FadeOut();
-
-        yield return new WaitForSeconds(1f);
-
-        UIManager.Instance.OnPlayGame();
-    }
-
-    private IEnumerator FadeOut()
+    private IEnumerator FadeIn()
     {
         float elapsedTime = 0f;
         while (elapsedTime < fadeDuration)
@@ -36,7 +24,7 @@ public class MainMenu : MonoBehaviour // PLACEHOLDER TODO : REFz3
         fadeCanvasGroup.alpha = 1;
     }
 
-    private IEnumerator FadeIn()
+    private IEnumerator FadeOut()
     {
         float elapsedTime = 0f;
         while (elapsedTime < fadeDuration)
@@ -49,19 +37,20 @@ public class MainMenu : MonoBehaviour // PLACEHOLDER TODO : REFz3
         fadeCanvasGroup.gameObject.SetActive(false);
     }
 
-    // Buttons
-    public void PlayGame()
+    private IEnumerator TransitionToLoadingScene()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        fadeCanvasGroup.gameObject.SetActive(true);
+        yield return FadeIn();
+        yield return new WaitForSeconds(1f);
+
+        GameManager.Instance.SetGameState(GameState.MainMenu);
+    }
+
+    // ================= Buttons =================
+    public void ExitMatch()
     {
         StartCoroutine(TransitionToLoadingScene());
-    }
-
-    public void OpenSettings()
-    {
-        UIManager.Instance.OnOpenSettings();
-    }
-
-    public void ExitGame()
-    {
-        UIManager.Instance.OnExitGame();
     }
 }

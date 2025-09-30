@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
 {
     public static UIManager Instance { get; private set; }
+
+    private Dictionary<string, UIPanel> panels = new();
 
     private void Awake()
     {
@@ -18,30 +21,12 @@ public class UIManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
     }
     private void OnEnable()
     {
-        GameManager.OnGameStateChanged += HandleGameStateChange;
         SceneManager.OnSceneLoaded += HandleSceneLoaded;
     }
 
     private void OnDisable()
     {
-        GameManager.OnGameStateChanged -= HandleGameStateChange;
         SceneManager.OnSceneLoaded -= HandleSceneLoaded;
-    }
-
-    private void HandleGameStateChange(GameState newState)
-    {
-        switch (newState)
-        {
-            case GameState.MainMenu:
-                // UI
-                break;
-            case GameState.Settings:
-                // UI
-                break;
-            case GameState.Playing:
-                // UI
-                break;
-        }
     }
 
     private void HandleSceneLoaded(string sceneName)
@@ -59,21 +44,19 @@ public class UIManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
         }
     }
 
-    public void OnPlayGame()
+    // Helper to show panel: Panel prefab are pre-registered (via UIPanel).
+    public void RegisterPanel(string name, UIPanel panel) => panels[name] = panel;
+    public void UnregisterPanel(string name) => panels.Remove(name);
+
+    public void ShowPanel(string name)
     {
-        Debug.Log("START");
-        GameManager.Instance.SetGameState(GameState.Playing);
+        if (!panels.TryGetValue(name, out var panel)) { Debug.LogWarning($"Panel {name} not found."); return; }
+        StartCoroutine(panel.ShowRoutine());
     }
 
-    public void OnOpenSettings()
+    public void HidePanel(string name)
     {
-        Debug.Log("SETTINGS");
-        SceneManager.Instance.LoadAdditiveScene(SceneNames.SettingsMenu);
-    }
-
-    public void OnExitGame()
-    {
-        Debug.Log("EXIT");
-        Application.Quit();
+        if (!panels.TryGetValue(name, out var panel)) { Debug.LogWarning($"Panel {name} not found."); return; }
+        StartCoroutine(panel.HideRoutine());
     }
 }

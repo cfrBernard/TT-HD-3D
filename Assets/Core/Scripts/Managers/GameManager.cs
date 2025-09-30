@@ -5,10 +5,8 @@ public enum GameState // PLACEHOLDER TODO : REFz3
 {
     Boot,
     MainMenu,
-    Settings,
     Playing,
-    Paused,
-    Loading
+    Paused
 }
 
 public class GameManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
@@ -48,9 +46,6 @@ public class GameManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
                 break;
             case GameState.Playing:
                 SceneManager.Instance.LoadSceneWithLoading(SceneNames.Game);
-                break;
-            case GameState.Settings:
-                SceneManager.Instance.LoadAdditiveScene(SceneNames.SettingsMenu);
                 break;
         }
 

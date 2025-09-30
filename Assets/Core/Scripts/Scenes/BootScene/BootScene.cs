@@ -4,16 +4,6 @@ using System.Collections;
 
 public class BootScene : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public Image progressBar;
-    public Image FadeInPanel;
-    public float fadeDuration = 0.5f;
-
-    // Progress Bar
-    private float totalSteps = 2f;
-    private float currentStep = 0f;
-    private float progressSpeed = 0.3f;
-
     [Header("Singletons")]
     private GameManager gameManager;
     private SceneManager sceneManager;
@@ -35,7 +25,8 @@ public class BootScene : MonoBehaviour
 
     private IEnumerator BootSequence()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(FadeOut());
+        yield return new WaitForSeconds(1f);
 
         InitSingletons();
         UpdateProgressBar();
@@ -49,10 +40,10 @@ public class BootScene : MonoBehaviour
         // UpdateProgressBar();
         // yield return StartCoroutine(PrepareAssets());
         
-        yield return new WaitForSeconds(0.5f); 
+        yield return new WaitForSeconds(1f);
         UpdateProgressBar();
         
-        yield return StartCoroutine(FadeInRoutine());
+        yield return StartCoroutine(FadeIn());
         yield return StartCoroutine(LoadMainMenuAsync());
     }
 
@@ -155,28 +146,47 @@ public class BootScene : MonoBehaviour
     
     private IEnumerator LoadMainMenuAsync()
     {
-        yield return new WaitForSeconds(0.1f);
-        
+        yield return null;
         GameManager.Instance.SetGameState(GameState.MainMenu);
     }
     #endregion
 
     #region UI
-    private IEnumerator FadeInRoutine()
-    {
-        Color startColor = FadeInPanel.color;
-        float timeElapsed = 0f;
+    [Header("UI Elements")]
+    public Image progressBar;
+    public CanvasGroup fadeCanvasGroup;
+    public float fadeDuration = 1f;
 
-        // Fade-in
-        while (timeElapsed < fadeDuration)
+    // Progress Bar
+    private float totalSteps = 2f;
+    private float currentStep = 0f;
+    private float progressSpeed = 0.3f;
+
+    private IEnumerator FadeIn()
+    {
+        fadeCanvasGroup.gameObject.SetActive(true);
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
         {
-            timeElapsed += Time.deltaTime;
-            float alpha = Mathf.Lerp(startColor.a, 1f, timeElapsed / fadeDuration);
-            FadeInPanel.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+            fadeCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
+        fadeCanvasGroup.alpha = 1;
+    }
 
-        FadeInPanel.color = new Color(startColor.r, startColor.g, startColor.b, 1f);
+    private IEnumerator FadeOut()
+    {
+        fadeCanvasGroup.gameObject.SetActive(true);
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            fadeCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        fadeCanvasGroup.alpha = 0;
+        fadeCanvasGroup.gameObject.SetActive(false);
     }
 
     private void UpdateProgressBar()
