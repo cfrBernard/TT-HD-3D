@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MainMenuController : MonoBehaviour // PLACEHOLDER TODO : REFz3
 {
+    [SerializeField] private TabManager tabManager;
+
     public CanvasGroup fadeCanvasGroup;
     public float fadeDuration = 1f;
 
@@ -41,6 +43,9 @@ public class MainMenuController : MonoBehaviour // PLACEHOLDER TODO : REFz3
         fadeCanvasGroup.gameObject.SetActive(false);
     }
 
+    // =====================================================
+    // === INTERNAL
+    // =====================================================
     private IEnumerator TransitionToLoadingScene()
     {
         UIManager.Instance.HidePanel("MenusPanel");
@@ -58,13 +63,67 @@ public class MainMenuController : MonoBehaviour // PLACEHOLDER TODO : REFz3
         GameManager.Instance.SetGameState(GameState.Playing);
     }
 
-    // ================= Buttons =================
-    public void OnPlayClicked()
+    // =====================================================
+    // === BUTTONS
+    // =====================================================
+    public void ShowPlayMenu()
     {
         UIManager.Instance.ShowPanel("MenusPanel");
         UIManager.Instance.HidePanel("MainPanel");
         UIManager.Instance.HidePanel("SidePanel");
         UIManager.Instance.HidePanel("Header");
+
+        tabManager.OpenWithTab(0);
+    }
+
+    public void ShowStoreMenu()
+    {
+        UIManager.Instance.ShowPanel("MenusPanel");
+        UIManager.Instance.HidePanel("MainPanel");
+        UIManager.Instance.HidePanel("SidePanel");
+        UIManager.Instance.HidePanel("Header");
+
+        tabManager.OpenWithTab(1);
+    }
+
+    public void ShowCollectionMenu()
+    {
+        UIManager.Instance.ShowPanel("MenusPanel");
+        UIManager.Instance.HidePanel("MainPanel");
+        UIManager.Instance.HidePanel("SidePanel");
+        UIManager.Instance.HidePanel("Header");
+
+        tabManager.OpenWithTab(2);
+    }
+
+    public void ShowMissionsMenu()
+    {
+        UIManager.Instance.ShowPanel("MenusPanel");
+        UIManager.Instance.HidePanel("MainPanel");
+        UIManager.Instance.HidePanel("SidePanel");
+        UIManager.Instance.HidePanel("Header");
+
+        tabManager.OpenWithTab(3);
+    }
+
+    public void ShowStatsMenu()
+    {
+        UIManager.Instance.ShowPanel("MenusPanel");
+        UIManager.Instance.HidePanel("MainPanel");
+        UIManager.Instance.HidePanel("SidePanel");
+        UIManager.Instance.HidePanel("Header");
+
+        tabManager.OpenWithTab(4);
+    }
+
+    public void ShowSettingsMenu()
+    {
+        UIManager.Instance.ShowPanel("MenusPanel");
+        UIManager.Instance.HidePanel("MainPanel");
+        UIManager.Instance.HidePanel("SidePanel");
+        UIManager.Instance.HidePanel("Header");
+
+        tabManager.OpenWithTab(5);
     }
 
     public void OnReturnClicked()
@@ -87,7 +146,6 @@ public class MainMenuController : MonoBehaviour // PLACEHOLDER TODO : REFz3
 
     public void ExitGame()
     {
-        Debug.Log("EXIT");
         Application.Quit();
     }
 }

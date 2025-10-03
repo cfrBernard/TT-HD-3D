@@ -55,6 +55,14 @@ public class TabManager : MonoBehaviour
         // EventSystem.current.SetSelectedGameObject
     }
 
+    public void OpenWithTab(int index) // title screen call
+    {
+        if (index < 0 || index >= tabButtons.Length)
+            index = 0;
+
+        SwitchTab(index);
+    }
+
     // private void SwitchToNextTab()
     // {
     //     int nextIndex = (currentTabIndex + 1) % tabButtons.Length;
