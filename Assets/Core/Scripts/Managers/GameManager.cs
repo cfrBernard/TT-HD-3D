@@ -6,7 +6,8 @@ public enum GameState // PLACEHOLDER TODO : REFz3
     Boot,
     MainMenu,
     Playing,
-    Paused
+    Paused,
+    Credits
 }
 
 public class GameManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
@@ -46,6 +47,9 @@ public class GameManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
                 break;
             case GameState.Playing:
                 SceneManager.Instance.LoadSceneWithLoading(SceneNames.Game);
+                break;
+            case GameState.Credits:
+                SceneManager.Instance.LoadScene(SceneNames.Credits);
                 break;
         }
 

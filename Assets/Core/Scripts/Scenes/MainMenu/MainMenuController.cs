@@ -63,6 +63,24 @@ public class MainMenuController : MonoBehaviour // PLACEHOLDER TODO : REFz3
         GameManager.Instance.SetGameState(GameState.Playing);
     }
 
+    private IEnumerator TransitionToCredits()
+    {
+        UIManager.Instance.HidePanel("SidePanel");
+        UIManager.Instance.HidePanel("MainPanel");
+        UIManager.Instance.HidePanel("Header");
+        UIManager.Instance.UnregisterPanel("MenusPanel");
+        UIManager.Instance.UnregisterPanel("MainPanel");
+        UIManager.Instance.UnregisterPanel("SidePanel");
+        UIManager.Instance.UnregisterPanel("Header");
+        yield return new WaitForSeconds(0.5f);
+
+        fadeCanvasGroup.gameObject.SetActive(true);
+        yield return FadeIn();
+        yield return new WaitForSeconds(1f);
+
+        GameManager.Instance.SetGameState(GameState.Credits);
+    }
+
     // =====================================================
     // === BUTTONS
     // =====================================================
@@ -142,6 +160,11 @@ public class MainMenuController : MonoBehaviour // PLACEHOLDER TODO : REFz3
     public void PlayGame()
     {
         StartCoroutine(TransitionToLoadingScene());
+    }
+
+    public void PlayCredits()
+    {
+        StartCoroutine(TransitionToCredits());
     }
 
     public void ExitGame()
