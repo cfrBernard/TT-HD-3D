@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using UnityEngine;
 
-public class RuleEngine // Gère l'application des règles avec le flow Triple Triad
+public class RuleEngine // Applique les règles avec le flow Triple Triad
 {
     public bool enableSame = true;
     public bool enablePlus = true;
     public bool enableCombo = true;
-    public bool enableBasic = true;
+    public bool enableCoinToss = true;
 
     private SameRule sameRule;
     private PlusRule plusRule;
@@ -21,6 +22,25 @@ public class RuleEngine // Gère l'application des règles avec le flow Triple T
         sameRule = new SameRule();
         plusRule = new PlusRule();
         comboRule = new ComboRule(this, basicRule);
+    }
+
+    public void LoadFromSettings(SettingsManager sm)
+    {
+        enableSame = sm.GetSetting<bool>("rules", "same");
+        enablePlus = sm.GetSetting<bool>("rules", "plus");
+        enableCombo = sm.GetSetting<bool>("rules", "combo");
+        enableCoinToss = sm.GetSetting<bool>("rules", "coinToss");
+        
+        // --- Debug ---
+        string logMessage = "Active rules : ";
+        if (enableSame)  logMessage += "Same, ";
+        if (enablePlus)  logMessage += "Plus, ";
+        if (enableCombo) logMessage += "Combo, ";
+        if (enableCoinToss) logMessage += "Coin Toss, ";
+        if (logMessage == "Active rules : ")
+            Debug.Log("No rules enabled.");
+        else
+            Debug.Log(logMessage.TrimEnd(',', ' '));
     }
 
     // Flow Triple Triad : Same -> Plus -> Combo -> BasicCapture
@@ -41,7 +61,7 @@ public class RuleEngine // Gère l'application des règles avec le flow Triple T
             comboRule.Apply(board, flippedThisTurn);
 
         // 4. BasicCapture sur la carte jouée
-        if (enableBasic && flippedThisTurn.Count == 0)
+        if (flippedThisTurn.Count == 0)
             basicRule.Apply(board, x, y, playedCard);
 
         // Fin du tour: vide le tracking

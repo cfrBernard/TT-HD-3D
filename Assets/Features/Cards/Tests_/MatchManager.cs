@@ -28,10 +28,7 @@ public class MatchManager : MonoBehaviour
     {
         // --- Init Rules ---
         rules = new RuleEngine();
-        rules.enableSame = true;
-        rules.enablePlus = true;
-        rules.enableCombo = true;
-        rules.enableBasic = true;
+        rules.LoadFromSettings(SettingsManager.Instance);
 
         board.OnCardPlaced += (x, y, card) => rules.Resolve(board, x, y, card);
 
