@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ScoreManager : MonoBehaviour
 {
     private int player1Score;
     private int player2Score;
 
-    // UI Placeholder
     public TextMeshProUGUI player1Ui;
     public TextMeshProUGUI player2Ui;
 
@@ -26,6 +25,11 @@ public class ScoreManager : MonoBehaviour
         GameEventBus.Unsubscribe<CardOwnerChanged>(OnCardOwnerChanged);
     }
 
+    private void OnCardOwnerChanged(CardOwnerChanged evt)
+    {
+        RecalculateScore();
+    }
+
     public void Init()
     {
         allCards.Clear();
@@ -39,22 +43,6 @@ public class ScoreManager : MonoBehaviour
         allCards.AddRange(matchManager.player2.Hand);
 
         RecalculateScore();
-    }
-
-    private void OnCardOwnerChanged(CardOwnerChanged evt)
-    {
-        UpdateScoreForCard(evt.OldOwner, evt.NewOwner, evt.Card);
-    }
-
-    private void UpdateScoreForCard(Player oldOwner, Player newOwner, Card card)
-    {
-        if (oldOwner == matchManager.player1) player1Score--;
-        else if (oldOwner == matchManager.player2) player2Score--;
-
-        if (newOwner == matchManager.player1) player1Score++;
-        else if (newOwner == matchManager.player2) player2Score++;
-
-        UpdateScoreDisplay();
     }
 
     private void RecalculateScore()

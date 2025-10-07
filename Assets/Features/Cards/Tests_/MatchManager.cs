@@ -7,6 +7,10 @@ public class MatchManager : MonoBehaviour
     // TESTING REFz2 – placeholder
     public List<CardData> dummyDeck;
 
+    // AIController
+    public CardViewRegistry cardRegistry;
+    public BoardViewManager boardView;
+
     public RuleEngine rules;
     public BoardManager board;
     public ScoreManager scoreManager;
@@ -19,10 +23,6 @@ public class MatchManager : MonoBehaviour
 
     private IPlayerController controller1;
     private IPlayerController controller2;
-
-    // AIController
-    public CardViewRegistry cardRegistry;
-    public BoardViewManager boardView;
 
     void Start()
     {
@@ -55,52 +55,167 @@ public class MatchManager : MonoBehaviour
         player1.HandManager = player1Hand;
         player2.HandManager = player2Hand;
 
-        // StartCoroutine(GameLoop()); GAME FLOW TESTING 
+        StartCoroutine(GameLoop());
     }
 
-    IEnumerator GameLoop()
+    private IEnumerator GameLoop()
     {
-        // Block drag && hover ???
+        // Lock all interactions at start
         CardDragHandler.DragLocked = true;
         CardHoverHandler.HoverLocked = true;
 
-        // --- 1. Draw hands ---
+        // --- 1. Intro ---
+        yield return StartCoroutine(IntroPhase());
+
+        // --- 2. Draw ---
+        yield return StartCoroutine(DrawPhase());
+
+        // --- 3. Mulligan ---
+        yield return StartCoroutine(MulliganPhase());
+
+        // --- 4. Main Loop ---
+        yield return StartCoroutine(MainLoop());
+
+        // --- 5. End ---
+        yield return StartCoroutine(EndPhase());
+    }
+
+    #region Intro
+    // =====================================================
+    // === 1. INTRO
+    // =====================================================
+    private IEnumerator IntroPhase()
+    {
+        UIManager.Instance.ShowPanel("GameIntro");
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.HidePanel("GameIntro");
+        UIManager.Instance.HidePanel("BackG");
+        UIManager.Instance.ShowPanel("PlayerUI_1");
+        UIManager.Instance.ShowPanel("PlayerUI_2");
+    }
+    #endregion
+
+    #region Draw
+    // =====================================================
+    // === 2. DRAW
+    // =====================================================
+    private IEnumerator DrawPhase()
+    {
         player1Hand.DrawStartingHand();
         player2Hand.DrawStartingHand();
-        yield return new WaitForSeconds(3f); // (int) = HandManager.DrawStartingHand.Delay *5 + 0.5
+        yield return new WaitForSeconds(3f);
+        // (int) = DrawStartingHand.Delay *5 + 0.5
+    }
+    #endregion
 
-        // Unlock hover ???
+    #region Mulligan
+    // =====================================================
+    // === 3. MULLIGAN
+    // =====================================================
+    private IEnumerator MulliganPhase()
+    {
+        UIManager.Instance.ShowPanel("MulliganPhase");
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.ShowPanel("MulliganButton");
+        UIManager.Instance.HidePanel("MulliganPhase");
+
         CardHoverHandler.HoverLocked = false;
 
-        // --- 2. Mulligan phase ---
-        yield return RunMulliganPhase(player1, player2, 10f);
+        // Mulligan phase
+        yield return RunMulliganPhase(player1, player2);
 
-        // --- 3. Decide starter ---
+        UIManager.Instance.HidePanel("MulliganButton");
+    }
+
+    private bool skipRequested = false;
+
+    public void RequestSkip()
+    {
+        skipRequested = true;
+    }
+
+    IEnumerator RunMulliganPhase(Player p1, Player p2)
+    {
+        bool p1Done = false;
+        bool p2Done = false;
+        skipRequested = false;
+
+        // Players lancent leur mulligan
+        p1.Controller.BeginMulligan(p1, () => p1Done = true);
+        p2.Controller.BeginMulligan(p2, () => p2Done = true);
+
+        Debug.Log("[MatchManager] Mulligan Phase started");
+
+        while (!skipRequested && !(p1Done && p2Done))
+        {
+            yield return null;
+        }
+
+        if (!p1Done) p1.Controller.CancelMulligan(p1);
+        if (!p2Done) p2.Controller.CancelMulligan(p2);
+
+        Debug.Log("[MatchManager] Mulligan Phase ended");
+    }
+    #endregion
+
+    #region Main Loop
+    // =====================================================
+    // === 4. MAIN LOOP
+    // =====================================================
+    private IEnumerator MainLoop()
+    {
         Player current = DecideStartingPlayer();
         Player other = (current == player1) ? player2 : player1;
 
+        UIManager.Instance.ShowPanel("TurnStart");
+        yield return new WaitForSeconds(1.5f);
+        UIManager.Instance.HidePanel("TurnStart");
+        UIManager.Instance.ShowPanel("MenuButton");
+
         scoreManager.Init();
 
-        // Unlock drag ???
         CardDragHandler.DragLocked = false;
 
-        // --- 4. Main loop ---
+        // Boucle principale
         while (!board.IsFull())
         {
-            // Block drag
             CardDragHandler.CurrentPlayerTurn = current;
-
             yield return current.Controller.TakeTurn(current, board);
 
             // Switch player
-            Player temp = current;
-            current = other;
-            other = temp;
+            (current, other) = (other, current);
         }
-
-        // --- 5. End of match ---
-        Debug.Log("[MatchManager] Game Over! Board is full.");
     }
+    
+    Player DecideStartingPlayer()
+    {
+        bool coin = Random.value > 0.5f;
+        Player starter = coin ? player1 : player2;
+        Debug.Log($"[MatchManager] Toss result: {starter.Name} starts!");
+        return starter;
+    }
+    #endregion
+
+    #region End
+    // =====================================================
+    // === 5. END
+    // =====================================================
+    private IEnumerator EndPhase()
+    {
+        Debug.Log("[MatchManager] Game Over! Board is full.");
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.ShowPanel("EndMatch");
+        UIManager.Instance.ShowPanel("BackG");
+        UIManager.Instance.HidePanel("MenuButton");
+        UIManager.Instance.HidePanel("PlayerUI_1");
+        UIManager.Instance.HidePanel("PlayerUI_2");
+    }
+    #endregion
+
+    #region Internal
+    // =====================================================
+    // === INTERNAL
+    // =====================================================
 
     // TESTING REFz2 – placeholder
     List<Card> CreateDeck(List<CardData> data, Player owner)
@@ -110,38 +225,5 @@ public class MatchManager : MonoBehaviour
             deck.Add(new Card(d, owner));
         return deck;
     }
-
-    Player DecideStartingPlayer()
-    {
-        bool coin = Random.value > 0.5f;
-        Player starter = coin ? player1 : player2;
-        Debug.Log($"[MatchManager] Toss result: {starter.Name} starts!");
-        return starter;
-    }
-
-    IEnumerator RunMulliganPhase(Player p1, Player p2, float duration)
-    {
-        bool p1Done = false;
-        bool p2Done = false;
-    
-        float timer = duration;
-    
-        // IA peut choisir direct (sinon elle attend le timer)
-        p1.Controller.BeginMulligan(p1, () => p1Done = true);
-        p2.Controller.BeginMulligan(p2, () => p2Done = true);
-    
-        Debug.Log("[MatchManager] Mulligan Phase started");
-    
-        while (timer > 0f && !(p1Done && p2Done))
-        {
-            // TODO : update UI "Game start {timer:F1} sec"
-            timer -= Time.deltaTime;
-            yield return null;
-        }
-
-        if (!p1Done) p1.Controller.CancelMulligan(p1);
-        if (!p2Done) p2.Controller.CancelMulligan(p2);
-    
-        Debug.Log("[MatchManager] Mulligan Phase ended");
-    }
+    #endregion
 }
