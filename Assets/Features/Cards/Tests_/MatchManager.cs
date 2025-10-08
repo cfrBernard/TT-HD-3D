@@ -183,7 +183,7 @@ public class MatchManager : MonoBehaviour
             (current, other) = (other, current);
         }
     }
-    
+
     Player DecideStartingPlayer()
     {
         bool coin = Random.value > 0.5f;

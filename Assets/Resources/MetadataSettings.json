@@ -1,17 +1,17 @@
 {
   "rules": {
     "same": {
-      "label": "Same",
+      "label": "Same Rule",
       "description": "If two or more side's numbers are equal to their opposing numbers, then those cards are flipped.",
       "type": "toggle"
     },
     "plus": {
-      "label": "Plus",
+      "label": "Plus Rule",
       "description": "If the sum of one side and its opposing number is equal to the sum of another side and its opposing number, the cards are flipped.",
       "type": "toggle"
     },
     "combo": {
-      "label": "Combo",
+      "label": "Combo Rule",
       "description": "If cards are flipped with the Same or Plus rules, they will act as if they were newly placed and will flip cards around them. Only the basic greater than rule applies for these.",
       "type": "toggle"
     },

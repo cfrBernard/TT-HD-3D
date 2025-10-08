@@ -11,11 +11,15 @@ public class CreditsController : MonoBehaviour
     [SerializeField] private float mouseIdleTime = 2f;
 
     private float lastMouseMoveTime;
+    private bool cursorHidden;
 
     private void Start()
     {
+        StartCoroutine(FadeOut());
         Application.runInBackground = true;
         lastMouseMoveTime = Time.unscaledTime;
+        Cursor.visible = false;
+        cursorHidden = true;
         StartCoroutine(PlayCredits());
     }
 
@@ -30,11 +34,26 @@ public class CreditsController : MonoBehaviour
                 StopCoroutine("FadeSkipButton");
                 StartCoroutine(FadeSkipButton(1f));
             }
+
+            if (cursorHidden)
+            {
+                Cursor.visible = true;
+                cursorHidden = false;
+            }
         }
-        else if (Time.unscaledTime - lastMouseMoveTime > mouseIdleTime && skipButton.alpha > 0f)
+        else if (Time.unscaledTime - lastMouseMoveTime > mouseIdleTime)
         {
-            StopCoroutine("FadeSkipButton");
-            StartCoroutine(FadeSkipButton(0f));
+            if (skipButton.alpha > 0f)
+            {
+                StopCoroutine("FadeSkipButton");
+                StartCoroutine(FadeSkipButton(0f));
+            }
+
+            if (!cursorHidden)
+            {
+                Cursor.visible = false;
+                cursorHidden = true;
+            }
         }
     }
 
@@ -96,8 +115,9 @@ public class CreditsController : MonoBehaviour
         group.alpha = end;
     }
 
-    // ================= Exit Transition =================
+    // ================= Enter/Exit Transition =================
     public CanvasGroup fadeCanvasGroup;
+
     private IEnumerator FadeIn()
     {
         fadeCanvasGroup.gameObject.SetActive(true);
@@ -110,6 +130,19 @@ public class CreditsController : MonoBehaviour
             yield return null;
         }
         fadeCanvasGroup.alpha = 1;
+    }
+
+    private IEnumerator FadeOut()
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < 1f)
+        {
+            fadeCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsedTime / 1f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        fadeCanvasGroup.alpha = 0;
+        fadeCanvasGroup.gameObject.SetActive(false);
     }
 
     private IEnumerator TransitionToLoadingScene()
