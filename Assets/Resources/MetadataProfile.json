@@ -1,0 +1,101 @@
+{
+    "version": 1,
+
+    "matchRewards": {
+        "win": { "coins": 100, "xp": 120 },
+        "draw": { "coins": 60, "xp": 75 },
+        "lose": { "coins": 20, "xp": 25 }
+    },
+
+    "cardPacks": {
+        "standard": {
+            "price": 250,
+            "cardsMin": 4,
+            "bonusCardChance": 0.2,
+            "dropRates": {
+                "level1_3": 0.6,
+                "level4_6": 0.25,
+                "level7_9": 0.1,
+                "level10": 0.05
+            }
+        }
+    },
+
+    "levels": {
+        "steps": [
+            { "level": 1, "xpRequired": 0 },
+            { "level": 2, "xpRequired": 100 },
+            { "level": 3, "xpRequired": 250 },
+            { "level": 4, "xpRequired": 450 },
+            { "level": 5, "xpRequired": 700 },
+            { "level": 6, "xpRequired": 1000 },
+            { "level": 7, "xpRequired": 1350 },
+            { "level": 8, "xpRequired": 1750 },
+            { "level": 9, "xpRequired": 2200 },
+            { "level": 10, "xpRequired": 2700 },
+            { "level": 11, "xpRequired": 3300 },
+            { "level": 12, "xpRequired": 4000 },
+            { "level": 13, "xpRequired": 4800 },
+            { "level": 14, "xpRequired": 5700 },
+            { "level": 15, "xpRequired": 6700 },
+            { "level": 16, "xpRequired": 7800 },
+            { "level": 17, "xpRequired": 9000 },
+            { "level": 18, "xpRequired": 10300 },
+            { "level": 19, "xpRequired": 11700 },
+            { "level": 20, "xpRequired": 13200 },
+            { "level": 21, "xpRequired": 14800 },
+            { "level": 22, "xpRequired": 16500 },
+            { "level": 23, "xpRequired": 18300 },
+            { "level": 24, "xpRequired": 20200 },
+            { "level": 25, "xpRequired": 22200 },
+            { "level": 26, "xpRequired": 24300 },
+            { "level": 27, "xpRequired": 26500 },
+            { "level": 28, "xpRequired": 28800 },
+            { "level": 29, "xpRequired": 31200 },
+            { "level": 30, "xpRequired": 33700 }
+        ],
+        "Rewards": [
+            { "level": 2, "reward": [{ "coins": 200 }, { "pack": 1 }] },
+            { "level": 3, "reward": [{ "coins": 300 }] },
+            { "level": 4, "reward": [{ "coins": 400 }, { "pack": 1 }] },
+            { "level": 5, "reward": [{ "coins": 500 }] },
+            { "level": 6, "reward": [{ "coins": 600 }] },
+            { "level": 7, "reward": [{ "coins": 700 }, { "pack": 1 }] },
+            { "level": 8, "reward": [{ "coins": 800 }] },
+            { "level": 9, "reward": [{ "coins": 900 }] },
+            { "level": 10, "reward": [{ "coins": 1000 }, { "pack": 1 }] },
+            { "level": 15, "reward": [{ "coins": 1500 }, { "pack": 1 }] },
+            { "level": 20, "reward": [{ "coins": 2000 }, { "pack": 1 }] },
+            { "level": 25, "reward": [{ "coins": 2500 }, { "pack": 1 }] },
+            { "level": 30, "reward": [{ "coins": 3000 }, { "pack": 2 }] }
+        ]
+    },
+
+    "missions": {
+        "daily": [
+            { "missionId": "01M001", "label": "Play 5 Matches", "goal": 5, "reward": [{ "coins": 150 }, { "xp": 150 }] },
+            { "missionId": "01M002", "label": "Win 2 Matches", "goal": 2, "reward": [{ "coins": 200 }, { "xp": 200 }] },
+            { "missionId": "01M003", "label": "Capture 10 Cards", "goal": 10, "reward": [{ "coins": 150 }, { "xp": 150 }] },
+            { "missionId": "01M004", "label": "Open 2 Card Packs", "goal": 2, "reward": [{ "coins": 150 }, { "xp": 150 }] }
+        ],
+        "achievements": {
+            "collectCard": [
+                { "missionId": "02M001", "label": "Collect 25 Cards", "goal": 25, "reward": [{ "coins": 300 }, { "xp": 300 }] },
+                { "missionId": "02M002", "label": "Collect 50 Cards", "goal": 50, "reward": [{ "coins": 400 }, { "xp": 400 }] },
+                { "missionId": "02M003", "label": "Collect 100 Cards", "goal": 100, "reward": [{ "coins": 600 }, { "xp": 600 }] },
+                { "missionId": "02M004", "label": "Collect 200 Cards", "goal": 200, "reward": [{ "coins": 800 }, { "xp": 800 }] },
+                { "missionId": "02M005", "label": "Collect 300 Cards", "goal": 300, "reward": [{ "coins": 1000 }, { "xp": 1000 }] },
+                { "missionId": "02M006", "label": "Collect 500 Cards", "goal": 500, "reward": [{ "coins": 1500 }, { "xp": 1500 }] },
+                { "missionId": "02M007", "label": "Collect 1000 Cards", "goal": 1000, "reward": [{ "coins": 2500 }, { "xp": 2500 }] }
+            ],
+            "winMatches": [
+                { "missionId": "03M001", "label": "Win 10 Matches", "goal": 10, "reward": [{ "coins": 300 }, { "xp": 300 }] },
+                { "missionId": "03M002", "label": "Win 25 Matches", "goal": 25, "reward": [{ "coins": 500 }, { "xp": 500 }] },
+                { "missionId": "03M003", "label": "Win 50 Matches", "goal": 50, "reward": [{ "coins": 800 }, { "xp": 800 }] },
+                { "missionId": "03M004", "label": "Win 100 Matches", "goal": 100, "reward": [{ "coins": 1200 }, { "xp": 1200 }] },
+                { "missionId": "03M005", "label": "Win 250 Matches", "goal": 250, "reward": [{ "coins": 2000 }, { "xp": 2000 }] },
+                { "missionId": "03M006", "label": "Win 500 Matches", "goal": 500, "reward": [{ "coins": 3500 }, { "xp": 3500 }] }
+            ]
+        }
+    }
+}

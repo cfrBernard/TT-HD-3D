@@ -9,6 +9,7 @@ public class BootScene : MonoBehaviour
     private SceneManager sceneManager;
     private SaveManager saveManager; 
     private SettingsManager settingsManager;
+    private ProfileManager profileManager;
     private InputManager inputManager;
     private UIManager _UIManager;
     private EventManager eventManager;
@@ -72,7 +73,7 @@ public class BootScene : MonoBehaviour
         }
         else
             saveManager = SaveManager.Instance;
-    
+
         if (SettingsManager.Instance == null)
         {
             settingsManager = new GameObject("SettingsManager").AddComponent<SettingsManager>();
@@ -80,6 +81,14 @@ public class BootScene : MonoBehaviour
         }
         else
             settingsManager = SettingsManager.Instance;
+            
+        if (ProfileManager.Instance == null)
+        {
+            profileManager = new GameObject("ProfileManager").AddComponent<ProfileManager>();
+            DontDestroyOnLoad(profileManager.gameObject);
+        }
+        else
+            profileManager = ProfileManager.Instance;
     
         if (InputManager.Instance == null)
         {

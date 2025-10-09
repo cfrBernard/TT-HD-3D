@@ -1,0 +1,79 @@
+{
+    "version": 1,
+
+    "playerData": {
+        "name": "User_00001",
+        "avatarId": "01A001",
+        "coins": 0,
+        "level": 1,
+        "xp": 0
+    },
+
+    "playerStats": { 
+        "matchPlayed": 0,
+        "matchWon": 0,
+        "matchLost": 0,
+        "matchDraw": 0,
+        "collectedCards": 0,
+        "unlockedCards": 0
+    },
+
+    "playerCollection": [
+        {"cardId": "01001", "quantity": 1},
+        {"cardId": "01002", "quantity": 1},
+        {"cardId": "01003", "quantity": 1},
+        {"cardId": "01004", "quantity": 1},
+        {"cardId": "01005", "quantity": 1},
+        {"cardId": "01006", "quantity": 1},
+        {"cardId": "01007", "quantity": 1},
+        {"cardId": "01008", "quantity": 1},
+        {"cardId": "01009", "quantity": 1},
+        {"cardId": "01010", "quantity": 1}
+    ],
+
+    "playerDeck": [
+        {"cardId": "01001", "quantity": 1},
+        {"cardId": "01002", "quantity": 1},
+        {"cardId": "01003", "quantity": 1},
+        {"cardId": "01004", "quantity": 1},
+        {"cardId": "01005", "quantity": 1},
+        {"cardId": "01006", "quantity": 1},
+        {"cardId": "01007", "quantity": 1},
+        {"cardId": "01008", "quantity": 1},
+        {"cardId": "01009", "quantity": 1},
+        {"cardId": "01010", "quantity": 1}
+    ],
+
+    "missions": {
+        "daily": {
+            "active": [
+                {"missionId": "01M001",
+                  "progress": 3,
+                  "completed": false,
+                  "claimed": false
+                },
+                {
+                  "missionId": "01M002",
+                  "progress": 2,
+                  "completed": true,
+                  "claimed": false
+                }
+            ],
+            "lastReset": "2025-10-09"
+        },
+        "achievements": {
+            "collectCards": {
+                "currentMissionId": "02M001",
+                "progress": 0,
+                "completed": false,
+                "claimed": false
+            },
+            "winMatches": {
+                "currentMissionId": "03M001",
+                "progress": 0,
+                "completed": false,
+                "claimed": false
+            }
+        }
+    }
+}
