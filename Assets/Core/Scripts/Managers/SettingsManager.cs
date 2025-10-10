@@ -71,7 +71,7 @@ public class SettingsManager : MonoBehaviour
 
     public void Save()
     {
-        SaveManager.SaveSettings(userSettings);
+        SaveManager.SaveData("UserSettings.json", userSettings);
     }
 
     public void ResetAllSettings() // TODO : Need UI Update too

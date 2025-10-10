@@ -33,12 +33,16 @@ public class UIManager : MonoBehaviour // PLACEHOLDER TODO : REFz3
     {
         switch (sceneName)
         {
-            case SceneNames.SettingsMenu:
-                Debug.Log("[UIManager] Settings Menu loaded.");
+            case SceneNames.MainMenu:
+                Debug.Log("[UIManager] MainMenu Scene loaded.");
                 // UI
                 break;
-            case SceneNames.MainMenu:
-                Debug.Log("[UIManager] Main Menu loaded.");
+            case SceneNames.Game:
+                Debug.Log("[UIManager] Game Scene loaded.");
+                // UI
+                break;
+            case SceneNames.Credits:
+                Debug.Log("[UIManager] Credits Scene loaded.");
                 // UI
                 break;
         }
