@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ef7cd99bfc287b4f99828de3d7bbe8d, type: 3}
+  m_Name: AIIdentityDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::AIIdentityDatabase
+  aiNames:
+  - DralasVeren
+  - Silvenar
+  - Black-Maw
+  - Dawnsinger
+  - Septimor
+  avatarDatabase: {fileID: 11400000, guid: ae9d7fdf93ce45d479b90b3c11570a8f, type: 2}

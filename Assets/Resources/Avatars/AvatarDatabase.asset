@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AvatarDatabase
   avatars:
   - {fileID: 11400000, guid: a906cc2b4ff25da45994c84d860e6932, type: 2}
+  - {fileID: 11400000, guid: f7f65e87330edca48990d23ac4bb8985, type: 2}
