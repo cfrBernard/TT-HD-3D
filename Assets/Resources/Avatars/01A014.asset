@@ -10,8 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5dd09e5c3fa6bf45b4ec4c1bcc18a1f, type: 3}
-  m_Name: 01A002
+  m_Name: 01A014
   m_EditorClassIdentifier: Assembly-CSharp::AvatarData
-  avatarId: 01A002
-  avatarName: 01A002_Test
-  avatarSprite: {fileID: 21300000, guid: 1f5f2612e858c5a4ebc4c0f82586cf69, type: 3}
+  avatarId: 01A014
+  avatarSprite: {fileID: 21300000, guid: 0c6e541309c8bd64f93d721cc795715b, type: 3}

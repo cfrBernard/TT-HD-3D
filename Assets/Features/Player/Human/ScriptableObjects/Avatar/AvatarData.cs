@@ -1,9 +1,8 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AvatarData", menuName = "GameData/Avatar")]
+[CreateAssetMenu(fileName = "AvatarData", menuName = "GameData/AvatarData")]
 public class AvatarData : ScriptableObject
 {
     public string avatarId;
-    public string avatarName;
     public Sprite avatarSprite;
 }

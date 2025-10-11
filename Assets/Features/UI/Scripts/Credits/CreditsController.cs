@@ -13,6 +13,8 @@ public class CreditsController : MonoBehaviour
     private float lastMouseMoveTime;
     private bool cursorHidden;
 
+    private bool isActive = true;
+
     private void Start()
     {
         StartCoroutine(FadeOut());
@@ -25,6 +27,9 @@ public class CreditsController : MonoBehaviour
 
     private void Update()
     {
+        if (!isActive)
+            return;
+
         if (Mouse.current != null && Mouse.current.delta.ReadValue() != Vector2.zero)
         {
             lastMouseMoveTime = Time.unscaledTime;
@@ -145,7 +150,7 @@ public class CreditsController : MonoBehaviour
         fadeCanvasGroup.gameObject.SetActive(false);
     }
 
-    private IEnumerator TransitionToLoadingScene()
+    private IEnumerator TransitionToMainMenu()
     {
         yield return new WaitForSecondsRealtime(0.5f);
 
@@ -154,11 +159,14 @@ public class CreditsController : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
 
         Application.runInBackground = false;
+        Cursor.visible = true;
+        cursorHidden = false;
         GameManager.Instance.SetGameState(GameState.MainMenu);
     }
 
     public void ExitCredits()
     {
-        StartCoroutine(TransitionToLoadingScene());
+        isActive = false;
+        StartCoroutine(TransitionToMainMenu());
     }
 }

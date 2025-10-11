@@ -82,8 +82,28 @@ public class ProfileManager : MonoBehaviour
         foreach (var kv in bindings)
         {
             var value = userProfile.SelectToken(kv.Key);
+            var dead = new List<Action<JToken>>();
+
             foreach (var callback in kv.Value)
-                callback.Invoke(value);
+            {
+                try
+                {
+                    callback?.Invoke(value);
+                }
+                catch (MissingReferenceException)
+                {
+                    // Callback cible un objet Unity détruit -> on le supprime
+                    dead.Add(callback);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[ProfileManager] Bind callback error ({kv.Key}): {e.Message}");
+                }
+            }
+
+            // Cleaning death callbacks
+            foreach (var d in dead)
+                kv.Value.Remove(d);
         }
     }
     #endregion
