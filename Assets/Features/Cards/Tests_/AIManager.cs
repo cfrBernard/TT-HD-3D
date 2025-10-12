@@ -12,7 +12,7 @@ public class AIManager : MonoBehaviour
     [SerializeField] private TMP_Text gameAiNameText;
     [SerializeField] private Image AiAvatarImage;
 
-    private string aiName;
+    public string aiName = "AI_Bot";
     private string aiAvatarId;
 
     private void Start()
@@ -31,7 +31,7 @@ public class AIManager : MonoBehaviour
 
         (aiName, aiAvatarId) = aiDatabase.GetRandomIdentity();
 
-        Debug.Log($"AI Generated → Name: {aiName}, Avatar: {aiAvatarId}");
+        Debug.Log($"AI Generated -> Name: {aiName}, Avatar: {aiAvatarId}");
     }
 
     private void UpdateUI()

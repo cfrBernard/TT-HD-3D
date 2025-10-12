@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class Player
 {
-    public string Name; // For logs
+    public string Name { get; private set; }
+    public bool IsHuman { get; private set; }
+    public int Score { get; set; }
 
     public HandManager HandManager { get; set; }
     public IPlayerController Controller { get; set; }
@@ -11,9 +13,10 @@ public class Player
     public List<Card> Deck { get; private set; } = new List<Card>();
     public List<Card> Hand { get; private set; } = new List<Card>();
 
-    public Player(string name)
+    public Player(string name, bool isHuman = false)
     {
         Name = name;
+        IsHuman = isHuman;
     }
 
     public void SetDeck(List<Card> deck)

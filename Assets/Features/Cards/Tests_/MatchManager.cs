@@ -10,6 +10,7 @@ public class MatchManager : MonoBehaviour
     // AIController
     public CardViewRegistry cardRegistry;
     public BoardViewManager boardView;
+    public AIManager aiManager;
 
     public RuleEngine rules;
     public BoardManager board;
@@ -33,8 +34,8 @@ public class MatchManager : MonoBehaviour
         board.OnCardPlaced += (x, y, card) => rules.Resolve(board, x, y, card);
 
         // --- Init player ---
-        player1 = new Player("Player1");
-        player2 = new Player("Player2");
+        player1 = new Player(ProfileManager.Instance.GetField<string>("playerData.name"), true);
+        player2 = new Player(aiManager.aiName);
 
         // --- Creates decks – TESTING REFz2 ---
         player1.SetDeck(CreateDeck(dummyDeck, player1));
@@ -98,6 +99,8 @@ public class MatchManager : MonoBehaviour
     // =====================================================
     private IEnumerator DrawPhase()
     {
+        GameEventBus.Publish(new InitialDrawEvent());
+
         player1Hand.DrawStartingHand();
         player2Hand.DrawStartingHand();
         yield return new WaitForSeconds(3f);
@@ -111,6 +114,8 @@ public class MatchManager : MonoBehaviour
     // =====================================================
     private IEnumerator MulliganPhase()
     {
+        GameEventBus.Publish(new MulliganPhaseEvent());
+
         UIManager.Instance.ShowPanel("MulliganPhase");
         yield return new WaitForSeconds(2f);
         UIManager.Instance.ShowPanel("MulliganButton");
@@ -164,6 +169,8 @@ public class MatchManager : MonoBehaviour
         Player current = DecideStartingPlayer();
         Player other = (current == player1) ? player2 : player1;
 
+        GameEventBus.Publish(new TurnStartEvent(current));
+
         UIManager.Instance.ShowPanel("TurnStart");
         yield return new WaitForSeconds(1.5f);
         UIManager.Instance.HidePanel("TurnStart");
@@ -176,10 +183,12 @@ public class MatchManager : MonoBehaviour
         // Boucle principale
         while (!board.IsFull())
         {
+            GameEventBus.Publish(new TurnStartEvent(current));
+
             CardDragHandler.CurrentPlayerTurn = current;
             yield return current.Controller.TakeTurn(current, board);
 
-            // Switch player
+            GameEventBus.Publish(new TurnEndEvent(current));
             (current, other) = (other, current);
         }
     }
@@ -201,11 +210,48 @@ public class MatchManager : MonoBehaviour
     {
         Debug.Log("[MatchManager] Game Over! Board is full.");
         yield return new WaitForSeconds(1f);
+
+        // Récup depuis ScoreManager
+        var (p1Score, p2Score) = scoreManager.GetScores();
+        player1.Score = p1Score;
+        player2.Score = p2Score;
+
+        // Déterminer le résultat
+        string result = GetMatchResult(player1, player2);
+        Debug.Log($"[MatchManager] Match result: {result}");
+
+        var meta = ProfileManager.Instance.MetadataProfile;
+        var rewardData = meta["matchRewards"]?[result];
+        int coins = (int?)rewardData?["coins"] ?? 0;
+        int xp = (int?)rewardData?["xp"] ?? 0;
+    
+        ApplyMatchRewards(result, (coins, xp));
+
         UIManager.Instance.ShowPanel("EndMatch");
         UIManager.Instance.ShowPanel("BackG");
         UIManager.Instance.HidePanel("MenuButton");
         UIManager.Instance.HidePanel("PlayerUI_1");
         UIManager.Instance.HidePanel("PlayerUI_2");
+    }
+    
+    private string GetMatchResult(Player p1, Player p2)
+    {
+        if (p1.Score > p2.Score) return "win";
+        if (p1.Score < p2.Score) return "lose";
+        return "draw";
+    }
+
+    private void ApplyMatchRewards(string result, (int coins, int xp) rewards)
+    {
+        var pm = ProfileManager.Instance;
+
+        pm.AddToField("playerStats.matchPlayed", 1);
+        pm.AddToField($"playerStats.match{UpperFirst(result)}", 1);
+        pm.AddToField("playerData.coins", rewards.coins);
+        pm.AddXp(rewards.xp);
+        pm.Save();
+
+        GameEventBus.Publish(new MatchEndEvent(result, rewards.coins, rewards.xp));
     }
     #endregion
 
@@ -221,6 +267,13 @@ public class MatchManager : MonoBehaviour
         foreach (var d in data)
             deck.Add(new Card(d, owner));
         return deck;
+    }
+
+    // --- Helpers ---
+    private string UpperFirst(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return s;
+        return char.ToUpper(s[0]) + s.Substring(1);
     }
     #endregion
 }

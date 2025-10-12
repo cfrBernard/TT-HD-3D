@@ -11,8 +11,8 @@
 
     "playerStats": { 
         "matchPlayed": 0,
-        "matchWon": 0,
-        "matchLost": 0,
+        "matchWin": 0,
+        "matchLose": 0,
         "matchDraw": 0,
         "collectedCards": 0,
         "unlockedCards": 0

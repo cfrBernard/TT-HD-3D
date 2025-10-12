@@ -23,7 +23,7 @@ public class CardOwnerView : MonoBehaviour
     {
         if (card == null || card.Owner == null) return;
 
-        if (card.Owner.Name == "Player1")
+        if (card.Owner.Name == ProfileManager.Instance.GetField<string>("playerData.name"))
         {
             ownerFlagRenderer.material = matPlayer1;
             if (vfxPlayer1 != null) vfxPlayer1.Play();

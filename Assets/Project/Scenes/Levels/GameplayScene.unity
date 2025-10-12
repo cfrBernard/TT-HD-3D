@@ -1074,8 +1074,8 @@ CanvasGroup:
   m_GameObject: {fileID: 76009921}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &78718142
 GameObject:
@@ -1236,6 +1236,7 @@ MonoBehaviour:
   introAiNameText: {fileID: 1116699260}
   gameAiNameText: {fileID: 490164918}
   AiAvatarImage: {fileID: 60608278}
+  aiName: 
 --- !u!1 &160331292
 GameObject:
   m_ObjectHideFlags: 0
@@ -1694,6 +1695,7 @@ GameObject:
   - component: {fileID: 244819634}
   - component: {fileID: 244819638}
   - component: {fileID: 244819637}
+  - component: {fileID: 244819639}
   - component: {fileID: 244819636}
   - component: {fileID: 244819635}
   m_Layer: 0
@@ -1790,6 +1792,20 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &244819639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244819633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 347e4dcd7ccdd154aaf6e9235c1e5e1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TurnStatusUI
+  statusText: {fileID: 1650055299}
+  isHuman: 1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,6 +1954,7 @@ GameObject:
   - component: {fileID: 375164029}
   - component: {fileID: 375164031}
   - component: {fileID: 375164030}
+  - component: {fileID: 375164032}
   m_Layer: 0
   m_Name: EndMatch
   m_TagString: Untagged
@@ -1994,6 +2011,20 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &375164032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375164028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a70dd3857726c478b219ce44d4ae83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndMatchUI
+  resultText: {fileID: 160331294}
+  rewardsText: {fileID: 1475727007}
 --- !u!1 &384770003
 GameObject:
   m_ObjectHideFlags: 0
@@ -3541,6 +3572,7 @@ GameObject:
   - component: {fileID: 654302206}
   - component: {fileID: 654302208}
   - component: {fileID: 654302207}
+  - component: {fileID: 654302209}
   m_Layer: 0
   m_Name: PlayerUI_1
   m_TagString: Untagged
@@ -3598,6 +3630,20 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &654302209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654302205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 347e4dcd7ccdd154aaf6e9235c1e5e1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TurnStatusUI
+  statusText: {fileID: 957721581}
+  isHuman: 1
 --- !u!1 &656286961
 GameObject:
   m_ObjectHideFlags: 0
@@ -3746,6 +3792,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0df1eb1beeabd2a49b6cd70b277b2194, type: 2}
   cardRegistry: {fileID: 886445331}
   boardView: {fileID: 243628282}
+  aiManager: {fileID: 102397345}
   board: {fileID: 243628281}
   scoreManager: {fileID: 1857078539}
   player1Hand: {fileID: 1377249972}
@@ -5722,7 +5769,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Your turn
+  m_text: Test
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c11d6a39fe6729d4086597d5c9becdfc, type: 2}
   m_sharedMaterial: {fileID: -1915094849200651488, guid: c11d6a39fe6729d4086597d5c9becdfc, type: 2}
@@ -6679,7 +6726,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1131644638
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7465,7 +7512,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1265362128}
   m_Layer: 0
-  m_Name: GUI
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8356,8 +8403,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.4, y: 0.1}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 390, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1475727007
 MonoBehaviour:
@@ -8379,7 +8426,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 250
+  m_text: Reward
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c11d6a39fe6729d4086597d5c9becdfc, type: 2}
   m_sharedMaterial: {fileID: -1915094849200651488, guid: c11d6a39fe6729d4086597d5c9becdfc, type: 2}
@@ -11106,7 +11153,7 @@ GameObject:
   - component: {fileID: 1895223228}
   - component: {fileID: 1895223227}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Divider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

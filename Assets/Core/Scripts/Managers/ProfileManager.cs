@@ -9,6 +9,8 @@ public class ProfileManager : MonoBehaviour
 {
     public static ProfileManager Instance { get; private set; }
 
+    public JObject MetadataProfile => metadataProfile;
+
     private JObject defaultProfile;
     private JObject userProfile;
     private JObject metadataProfile;
@@ -70,6 +72,92 @@ public class ProfileManager : MonoBehaviour
 
         current[parts[^1]] = JToken.FromObject(value);
         Save();
+    }
+
+    public void AddToField(string path, float amount)
+    {
+        var token = userProfile.SelectToken(path);
+        float current = 0;
+
+        if (token != null && token.Type == JTokenType.Integer)
+            current = token.Value<int>();
+        else if (token != null && token.Type == JTokenType.Float)
+            current = token.Value<float>();
+
+        float newValue = current + amount;
+        SetField(path, newValue);
+    }
+
+    // Placeholder
+    public void AddXp(int amount)
+    {
+        int currentXp = GetField<int>("playerData.xp");
+        int currentLevel = GetField<int>("playerData.level");
+
+        int newXp = currentXp + amount;
+        int newLevel = currentLevel;
+
+        // Récup steps depuis metadata
+        var steps = metadataProfile["levels"]?["steps"] as JArray;
+        if (steps == null)
+        {
+            Debug.LogWarning("[ProfileManager] No XP steps found in metadata.");
+            return;
+        }
+
+        // Trouver le niveau en fonction de l'Xp
+        foreach (var step in steps)
+        {
+            int level = step["level"].Value<int>();
+            int xpRequired = step["xpRequired"].Value<int>();
+
+            if (newXp >= xpRequired)
+                newLevel = level;
+            else
+                break;
+        }
+
+        // Met à jour le profil
+        SetField("playerData.xp", newXp);
+
+        // Si on a monté de niveau
+        if (newLevel > currentLevel)
+        {
+            SetField("playerData.level", newLevel);
+            ApplyLevelRewards(newLevel);
+
+            // Publier un event pour l'UI
+            GameEventBus.Publish(new PlayerXpChangedEvent(newXp, newLevel));
+        }
+        else
+        {
+            // Toujours notifier si l'Xp change
+            GameEventBus.Publish(new PlayerXpChangedEvent(newXp, currentLevel));
+        }
+    }
+
+    private void ApplyLevelRewards(int level)
+    {
+        var rewardsArray = metadataProfile["levels"]?["Rewards"] as JArray;
+        if (rewardsArray == null) return;
+
+        foreach (var entry in rewardsArray)
+        {
+            if (entry["level"].Value<int>() != level) continue;
+
+            var rewards = entry["reward"] as JArray;
+            foreach (var reward in rewards)
+            {
+                if (reward["coins"] != null)
+                    AddToField("playerData.coins", reward["coins"].Value<int>());
+
+                if (reward["pack"] != null)
+                {
+                    // e.g. placeholder : +1 pack
+                    Debug.Log($"[ProfileManager] Player received {reward["pack"]} pack(s) for level {level}");
+                }
+            }
+        }
     }
     #endregion
 
