@@ -88,7 +88,7 @@ public class ProfileManager : MonoBehaviour
         SetField(path, newValue);
     }
 
-    // Placeholder
+    // AddXp Placeholder
     public void AddXp(int amount)
     {
         int currentXp = GetField<int>("playerData.xp");
@@ -224,4 +224,39 @@ public class ProfileManager : MonoBehaviour
     public void BindFill(string path, Image img)
         => Bind<float>(path, value => img.fillAmount = Mathf.Clamp01(value));
     #endregion
+
+    // --- Bind Slider XP (auto updates with playerData.xp / level) ---
+    public void BindSliderXp(Slider slider)
+    {
+        void UpdateXpUI()
+        {
+            int xp = GetField<int>("playerData.xp");
+            int level = GetField<int>("playerData.level");
+
+            var steps = metadataProfile["levels"]?["steps"] as JArray;
+            if (steps == null || steps.Count == 0) return;
+
+            int prevXp = 0;
+            int nextXp = 0;
+
+            for (int i = 0; i < steps.Count; i++)
+            {
+                if (steps[i]["level"].Value<int>() == level)
+                {
+                    prevXp = steps[i]["xpRequired"].Value<int>();
+                    nextXp = (i + 1 < steps.Count) ? steps[i + 1]["xpRequired"].Value<int>() : prevXp;
+                    break;
+                }
+            }
+
+            slider.minValue = prevXp;
+            slider.maxValue = nextXp;
+            slider.value = xp;
+
+        }
+
+        Bind<int>("playerData.xp", _ => UpdateXpUI());
+        Bind<int>("playerData.level", _ => UpdateXpUI());
+        UpdateXpUI();
+    }
 }

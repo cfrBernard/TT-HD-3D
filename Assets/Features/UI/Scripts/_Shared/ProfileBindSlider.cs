@@ -4,8 +4,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class ProfileBindSlider : MonoBehaviour
 {
-    [Tooltip("JSON path in ProfileManager (ex: playerData.xp)")]
+    [Tooltip("JSON path in ProfileManager (ex: playerData.health)")]
     [SerializeField] private string path;
+
+    [Tooltip("Enable XP mode (binds to XP/Level automatically)")]
+    [SerializeField] private bool xpMode = false;
 
     private Slider slider;
 
@@ -16,8 +19,12 @@ public class ProfileBindSlider : MonoBehaviour
 
     private void Start()
     {
-        if (ProfileManager.Instance == null || string.IsNullOrEmpty(path)) return;
+        if (ProfileManager.Instance == null)
+            return;
 
-        ProfileManager.Instance.Bind<float>(path, value => slider.value = value);
+        if (xpMode)
+            ProfileManager.Instance.BindSliderXp(slider);
+        else if (!string.IsNullOrEmpty(path))
+            ProfileManager.Instance.BindSlider(path, slider);
     }
 }
