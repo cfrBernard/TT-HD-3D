@@ -88,8 +88,8 @@ public class MatchManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         UIManager.Instance.HidePanel("GameIntro");
         UIManager.Instance.HidePanel("BackG");
-        UIManager.Instance.ShowPanel("PlayerUI_1");
-        UIManager.Instance.ShowPanel("PlayerUI_2");
+        //UIManager.Instance.ShowPanel("PlayerUI_1");
+        //UIManager.Instance.ShowPanel("PlayerUI_2");
     }
     #endregion
 
@@ -230,8 +230,8 @@ public class MatchManager : MonoBehaviour
         UIManager.Instance.ShowPanel("EndMatch");
         UIManager.Instance.ShowPanel("BackG");
         UIManager.Instance.HidePanel("MenuButton");
-        UIManager.Instance.HidePanel("PlayerUI_1");
-        UIManager.Instance.HidePanel("PlayerUI_2");
+        //UIManager.Instance.HidePanel("PlayerUI_1");
+        //UIManager.Instance.HidePanel("PlayerUI_2");
     }
     
     private string GetMatchResult(Player p1, Player p2)

@@ -44,8 +44,8 @@ public class MatchController : MonoBehaviour
     private IEnumerator TransitionToMenu()
     {
         UIManager.Instance.UnregisterPanel("GameMenu");
-        UIManager.Instance.UnregisterPanel("PlayerUI_2");
-        UIManager.Instance.UnregisterPanel("PlayerUI_1");
+        //UIManager.Instance.UnregisterPanel("PlayerUI_2");
+        //UIManager.Instance.UnregisterPanel("PlayerUI_1");
         UIManager.Instance.UnregisterPanel("BackG");
         UIManager.Instance.UnregisterPanel("MenuButton");
         UIManager.Instance.UnregisterPanel("TurnStart");
@@ -64,8 +64,8 @@ public class MatchController : MonoBehaviour
     private IEnumerator RestartTransition()
     {
         UIManager.Instance.UnregisterPanel("GameMenu");
-        UIManager.Instance.UnregisterPanel("PlayerUI_2");
-        UIManager.Instance.UnregisterPanel("PlayerUI_1");
+        //UIManager.Instance.UnregisterPanel("PlayerUI_2");
+        //UIManager.Instance.UnregisterPanel("PlayerUI_1");
         UIManager.Instance.UnregisterPanel("BackG");
         UIManager.Instance.UnregisterPanel("MenuButton");
         UIManager.Instance.UnregisterPanel("TurnStart");
@@ -100,8 +100,8 @@ public class MatchController : MonoBehaviour
         UIManager.Instance.ShowPanel("GameMenu");
         UIManager.Instance.ShowPanel("BackG");
         UIManager.Instance.HidePanel("MenuButton");
-        UIManager.Instance.HidePanel("PlayerUI_1");
-        UIManager.Instance.HidePanel("PlayerUI_2");
+        //UIManager.Instance.HidePanel("PlayerUI_1");
+        //UIManager.Instance.HidePanel("PlayerUI_2");
     }
 
     public void ResumeGame()
@@ -109,7 +109,7 @@ public class MatchController : MonoBehaviour
         UIManager.Instance.HidePanel("GameMenu");
         UIManager.Instance.HidePanel("BackG");
         UIManager.Instance.ShowPanel("MenuButton");
-        UIManager.Instance.ShowPanel("PlayerUI_1");
-        UIManager.Instance.ShowPanel("PlayerUI_2");
+        //UIManager.Instance.ShowPanel("PlayerUI_1");
+        //UIManager.Instance.ShowPanel("PlayerUI_2");
     }
 }
